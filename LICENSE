@@ -1,0 +1,34 @@
+BantuanKu Source Code License
+
+Copyright (c) 2026 Hew Pik Rou
+All rights reserved.
+
+BantuanKu was developed as a Final Year Project (FYP). The source code in
+this repository is made publicly available for educational and reference
+purposes only.
+
+Permission is granted to view and study the source code for personal,
+educational and academic reference purposes.
+
+Without prior written permission from the copyright holder, you may not:
+
+1. Copy or reproduce substantial portions of the source code.
+2. Modify, adapt or create derivative works based on substantial portions
+   of the source code.
+3. Redistribute, sublicense or republish the source code.
+4. Incorporate substantial portions of the source code into another
+   software project, product or service.
+5. Use the source code for commercial purposes, including selling,
+   licensing, monetizing or otherwise commercially exploiting the
+   software or any substantial portion of it.
+6. Present the source code, in whole or in substantial part, as your own
+   work.
+
+Third-party libraries, frameworks, packages, assets and other dependencies
+used by this project are not covered by this license and remain subject to
+their respective licenses and terms.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE COPYRIGHT
+HOLDER SHALL NOT BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING
+FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OF THE SOFTWARE.
