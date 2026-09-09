@@ -19,7 +19,6 @@
       "package": "com.rainzyyyy.fypbantuanku"
     },
     "web": {
-      "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
     "plugins": [

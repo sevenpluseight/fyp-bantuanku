@@ -1,0 +1,72 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+
+    pull_request:
+      branches:
+        - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate Project
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Expo Doctor
+        run: npx expo-doctor
+
+bundle:
+  name: Bundle ${{ matrix.platform }}
+  runs-on: ubuntu-latest
+  timeout-minutes: 15
+
+  strategy:
+    fail-fast: false
+    matrix:
+      platform:
+        - ios
+        - android
+
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Export ${{ matrix.platform }} bundle
+      run: npx expo export --platform ${{ matrix.platform }} --output-dir dist-${{ matrix.platform }}
+      env:
+        EXPO_PUBLIC_SUPABASE_URL: https://example.supabase.co
+        EXPO_PUBLIC_SUPABASE_KEY: ci-placeholder-key
