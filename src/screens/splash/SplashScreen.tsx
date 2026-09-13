@@ -66,7 +66,7 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
         <Animated.View style={animatedStyle}>
           <Image
             source={require("../../../assets/bantuanku-logo.png")}
-            style={{ width: 200, height: 200 }}
+            style={{ width: 300, height: 300 }}
             resizeMode="contain"
           />
         </Animated.View>
