@@ -16,7 +16,7 @@ welfare, healthcare, assistive and housing needs of B40 elderly communities.
 | BA   | Bantuan Am Persekutuan                                     | General Welfare Assistance | Jabatan Kebajikan Masyarakat (JKM)                 |
 | BPT  | Bantuan Penjagaan OKU Terlantar / Pesakit Kronik Terlantar | Care Assistance            | Jabatan Kebajikan Masyarakat (JKM)                 |
 | BAT  | Bantuan Alat Sokongan / Alat Tiruan                        | Assistive Support          | Jabatan Kebajikan Masyarakat (JKM)                 |
-| TBP  | Tabung Bantuan Perubatan                                   | Medical Assistance         | Kementerian Kesihatan Malaysia (KKM/MOH)               |
+| TBP  | Tabung Bantuan Perubatan                                   | Medical Assistance         | Kementerian Kesihatan Malaysia (KKM/MOH)           |
 
 ---
 
