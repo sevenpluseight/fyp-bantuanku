@@ -1,4 +1,4 @@
-import { TextInputProps, View, Text, TextInput, Pressable } from "react-native";
+import { type TextInputProps, View, Text, TextInput, Pressable } from "react-native";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react-native/icons";
 

@@ -1,5 +1,5 @@
 import * as Haptics from "expo-haptics";
-import {ActivityIndicator, Pressable, type PressableProps, Text} from "react-native";
+import { ActivityIndicator, Pressable, type PressableProps, Text } from "react-native";
 
 type ButtonVariant = "primary" | "secondary" | "outline";
 type ButtonSize = "sm" | "md" | "lg";
