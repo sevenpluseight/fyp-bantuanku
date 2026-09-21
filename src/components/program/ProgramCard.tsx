@@ -1,6 +1,7 @@
-import {Pressable, Text, View} from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Card from "../ui/Card";
-import {Building2, ChevronRight} from "lucide-react-native";
+import { Building2, ChevronRight } from "lucide-react-native";
+import Badge from "../ui/Badge";
 
 type ProgramStatus = "recommended" | "unknown";
 
@@ -12,26 +13,23 @@ export type ProgramCardProps = {
   onPress?: () => void;
 };
 
-const statusStyles: Record<
+const statusConfig: Record<
     ProgramStatus,
     {
       label: string;
-      container: string;
-      text: string;
+      variant: "success" | "warning";
     }
 > = {
   recommended: {
     label: "You may be eligible",
-    container: "bg-success-background",
-    text: "text-success-foreground",
+    variant: "success",
   },
 
   unknown: {
     label: "More information needed",
-    container: "bg-warning-background",
-    text: "text-warning-foreground",
-  },
-};
+    variant: "warning",
+  }
+}
 
 export default function ProgramCard({
     name,
@@ -51,26 +49,12 @@ export default function ProgramCard({
           <View className="flex-row items-start">
             <View className="flex-1 pr-3">
               {status && (
-                  <View
-                    className={`
-                      mb-3
-                      self-start
-                      rounded-full
-                      px-3
-                      py-1
-                      ${statusStyles[status].container}
-                    `}
+                  <Badge
+                    variant={statusConfig[status].variant}
+                    className="mb-3"
                   >
-                    <Text
-                      className={`
-                        text-xs
-                        font-semibold
-                        ${statusStyles[status].text}
-                      `}
-                    >
-                      {statusStyles[status].label}
-                    </Text>
-                  </View>
+                    {statusConfig[status].label}
+                  </Badge>
               )}
 
               <Text className="text-lg font-semibold leading-6 text-foreground">
@@ -90,8 +74,8 @@ export default function ProgramCard({
               </View>
 
               <Text
-                className="mt-3 text-sm leading-5 text-muted-foreground"
-                numberOfLines={3}
+                  className="mt-3 text-sm leading-5 text-muted-foreground"
+                  numberOfLines={3}
               >
                 {description}
               </Text>
@@ -100,9 +84,9 @@ export default function ProgramCard({
             {onPress && (
                 <View className="pt-1">
                   <ChevronRight
-                    size={22}
-                    color="#626775"
-                    strokeWidth={2}
+                      size={22}
+                      color="#626775"
+                      strokeWidth={2}
                   />
                 </View>
             )}
