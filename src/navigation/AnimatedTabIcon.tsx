@@ -1,6 +1,6 @@
 import { LucideIcon } from "lucide-react-native";
 import { useEffect, useRef } from "react";
-import { Animated, Easing, type StyleProp, type ViewStyle } from "react-native";
+import { Animated, Easing } from "react-native";
 
 type AnimatedTabIconProps = {
   icon: LucideIcon;
