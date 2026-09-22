@@ -1,20 +1,25 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { RootStackParamList } from "./types";
 import MainTabNavigator from "./MainTabNavigator";
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
+import { useAuth } from "../contexts/AuthContext";
+import { ActivityIndicator, View } from "react-native";
+import AuthNavigator from "./AuthNavigator";
 
 export default function RootNavigator() {
-  return (
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen
-            name="MainTabs"
-            component={MainTabNavigator}
-        />
-      </Stack.Navigator>
-  );
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return (
+        <View className="flex-1 items-center justify-center bg-background">
+          <ActivityIndicator
+            size="large"
+            color="#0352CE"
+          />
+        </View>
+    );
+  }
+
+  if (!session) {
+    return <AuthNavigator />;
+  }
+
+  return <MainTabNavigator />;
 }
