@@ -4,3 +4,7 @@ export type MainTabParamList = {
   Applications: undefined;
   Profile: undefined;
 };
+
+export type RootStackParamList = {
+  MainTabs: undefined;
+};
