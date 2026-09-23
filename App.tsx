@@ -1,4 +1,7 @@
+import "expo-sqlite/localStorage/install"
+
 import "./global.css";
+import "./src/i18n"
 
 import { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
