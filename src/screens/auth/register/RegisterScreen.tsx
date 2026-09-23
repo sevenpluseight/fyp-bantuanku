@@ -3,6 +3,8 @@ import { AuthStackParamList } from "../../../navigation/types";
 import { useState } from "react";
 import { RegisterFormData, RegisterPersonalFormData } from "../../../schemas/auth";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
+
 import AuthBackground from "../../../components/auth/AuthBackground";
 import Screen from "../../../components/layout/Screen";
 import RegisterAccountStep from "./RegisterAccountStep";
@@ -14,6 +16,7 @@ type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
 export default function RegisterScreen({
     navigation
 }: Props) {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
 
   const [
@@ -55,7 +58,7 @@ export default function RegisterScreen({
 
                   <View className="mt-6 flex-row items-center justify-center">
                     <Text className="text-sm text-muted-foreground">
-                      Already have an account?{" "}
+                      {t("auth.register.account.alreadyHaveAccount")}{" "}
                     </Text>
 
                     <Pressable
@@ -64,15 +67,15 @@ export default function RegisterScreen({
                       hitSlop={8}
                     >
                       <Text className="text-sm font-semibold text-primary">
-                        Sign in
+                        {t("auth.register.account.signIn")}
                       </Text>
                     </Pressable>
                   </View>
                 </View>
             )}
 
-            {step === 2 && (
-                <View className="flex-1 items-center justify-center">
+          {step === 2 && (
+                <View className="flex-1 justify-center">
                   <RegisterPersonalStep
                     defaultValues={personalData}
                     onBack={() => setStep(1)}
