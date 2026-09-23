@@ -125,7 +125,7 @@ export default function DateInput({
 
         {showPicker && (
             <DateTimePicker
-              value={value ?? new Date() ?? defaultPickerDate}
+              value={value ?? new Date() ?? new Date()}
               mode="date"
               display={
                 Platform.OS === "ios" ? "spinner" : "default"
