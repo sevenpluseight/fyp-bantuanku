@@ -2,11 +2,12 @@ import { useState } from "react";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
 import { Platform, Pressable, Text, View } from "react-native";
 import { CalendarDays } from "lucide-react-native";
+import {useTranslation} from "react-i18next";
 
 type DateInputProps = {
   label?: string;
   value?: Date;
-  onChange: (data: Date) => void;
+  onChange?: (date: Date) => void;
   placeholder?: string;
   error?: string;
   helperText?: string;
@@ -21,14 +22,16 @@ export default function DateInput({
     label,
     value,
     onChange,
-    placeholder = "Select a date",
+    placeholder,
     error,
     helperText,
     required = false,
     minimumDate,
     maximumDate,
+    defaultPickerDate,
     disabled = false
 }: DateInputProps) {
+  const { t, i18n } = useTranslation();
   const [showPicker, setShowPicker] = useState(false);
 
   const handleValueChange = (
@@ -39,7 +42,7 @@ export default function DateInput({
       setShowPicker(false);
     }
 
-    onChange(selectedDate);
+    onChange?.(selectedDate);
   };
 
   const handleDismiss = () => {
@@ -49,12 +52,26 @@ export default function DateInput({
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-MY", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+    const localeMap: Record<string, string> = {
+      en: "en-MY",
+      ms: "ms-MY",
+      zh: "zh-CN",
+    };
+
+    const language = i18n.resolvedLanguage ?? i18n.language;
+    const locale = localeMap[language] ?? "en-MY";
+
+    return date.toLocaleDateString(
+        locale,
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        }
+    );
   };
+
+  const displayValue = value ? formatDate(value) : placeholder ?? t("common.selectDate");
 
   return (
       <View>
@@ -88,7 +105,7 @@ export default function DateInput({
             }
             ${
               disabled
-                  ? "opacity-50"
+                  ? "bg-surface"
                   : "bg-background"
             }
           `}
@@ -100,15 +117,16 @@ export default function DateInput({
                 : "text-base text-muted-foreground"
             }
           >
-            {value
-              ? formatDate(value)
-              : placeholder
-            }
+            {displayValue}
           </Text>
 
           <CalendarDays
             size={20}
-            color="#626775"
+            color={
+              disabled
+                ? "#9CA3AF"
+                : "#626775"
+            }
           />
         </Pressable>
 
@@ -122,9 +140,9 @@ export default function DateInput({
             </Text>
         ) : null}
 
-        {showPicker && (
+        {showPicker && !disabled && (
             <DateTimePicker
-              value={value ?? new Date() ?? new Date()}
+              value={value ?? defaultPickerDate ?? new Date()}
               mode="date"
               display={
                 Platform.OS === "ios" ? "spinner" : "default"
@@ -136,14 +154,16 @@ export default function DateInput({
             />
         )}
 
-        {Platform.OS === "ios" && showPicker && (
+        {Platform.OS === "ios" && showPicker && !disabled && (
             <Pressable
               onPress={() => setShowPicker(false)}
+              accessibilityRole="button"
+              accessibilityLabel={t("common.done")}
               className="mt-2 self-end px-2 py-2"
               hitSlop={8}
             >
               <Text className="font-semibold text-primary">
-                Done
+                {t("common.done")}
               </Text>
             </Pressable>
         )}
