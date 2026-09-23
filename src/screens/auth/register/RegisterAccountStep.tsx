@@ -2,6 +2,9 @@ import { RegisterFormData, registerSchema } from "../../../schemas/auth";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import {useEffect, useMemo} from "react";
+
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
 
@@ -14,12 +17,20 @@ export default function RegisterAccountStep({
     defaultValues,
     onContinue
 }: RegisterAccountStepProps) {
+  const { t, i18n } = useTranslation();
+
+  const schema = useMemo(
+      () => registerSchema(t),
+      [t, i18n.resolvedLanguage]
+  );
+
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    trigger,
+    formState: { errors, submitCount },
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(schema),
     defaultValues: defaultValues ?? {
       email: "",
       password: "",
@@ -27,19 +38,25 @@ export default function RegisterAccountStep({
     },
   });
 
+  useEffect(() => {
+    if (submitCount > 0) {
+      void trigger();
+    }
+  }, [i18n.resolvedLanguage, submitCount, trigger]);
+
   return (
       <View>
         <View className="mb-8">
           <Text className="text-3xl font-bold text-foreground">
-            Create your account
+            {t("auth.register.account.title")}
           </Text>
 
           <Text className="mt-2 text-base leading-6 text-muted-foreground">
-            Enter your account details to get started with BantuanKu.
+            {t("auth.register.account.subtitle")}
           </Text>
 
           <Text className="mt-4 text-sm font-medium text-primary">
-            Step 1 of 4
+            {t("auth.register.account.step")}
           </Text>
         </View>
 
@@ -51,8 +68,8 @@ export default function RegisterAccountStep({
               field: { onChange, onBlur, value },
             }) => (
                 <Input
-                  label="Email"
-                  placeholder="Enter your email"
+                  label={t("auth.register.account.email")}
+                  placeholder={t("auth.register.account.emailPlaceholder")}
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
@@ -74,13 +91,13 @@ export default function RegisterAccountStep({
               field: { onChange, onBlur, value },
             }) => (
                 <Input
-                  label="Password"
-                  placeholder="Create a password"
+                  label={t("auth.register.account.password")}
+                  placeholder={t("auth.register.account.passwordPlaceholder")}
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
                   error={errors.password?.message}
-                  helperText="Use at least 8 characters."
+                  helperText={t("auth.register.account.passwordPlaceholder")}
                   secureTextEntry
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -98,8 +115,8 @@ export default function RegisterAccountStep({
               field: { onChange, onBlur, value },
             }) => (
                 <Input
-                  label="Confirm Password"
-                  placeholder="Enter your password again"
+                  label={t("auth.register.account.confirmPassword")}
+                  placeholder={t("auth.register.account.confirmPasswordPlaceholder")}
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
@@ -120,7 +137,7 @@ export default function RegisterAccountStep({
             fullWidth
             onPress={handleSubmit(onContinue)}
           >
-            Continue
+            {t("common.continue")}
           </Button>
         </View>
       </View>
