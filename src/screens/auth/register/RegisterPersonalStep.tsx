@@ -2,28 +2,19 @@ import { RegisterPersonalFormData, registerPersonalSchema } from "../../../schem
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pressable, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { useEffect, useMemo, useState } from "react";
+
 import Input from "../../../components/ui/Input";
 import Select from "../../../components/ui/Select";
 import Button from "../../../components/ui/Button";
 import DateInput from "../../../components/ui/DatePicker";
-
 
 type RegisterPersonalStepProps = {
   defaultValues?: RegisterPersonalFormData;
   onBack: () => void;
   onContinue: (data: RegisterPersonalFormData) => void;
 };
-
-const citizenshipOptions = [
-  {
-    label: "Malaysian",
-    value: "malaysian",
-  },
-  {
-    label: "Non-Malaysian",
-    value: "non_malaysian",
-  },
-];
 
 const formatMyKad = (value: string) => {
   const digits = value.replace(/\D/g, "").slice(0, 12);
@@ -38,6 +29,45 @@ const formatMyKad = (value: string) => {
 
   return `${digits.slice(0, 6)}-${digits.slice(6, 8)}-${digits.slice(8)}`
 };
+
+const getDobFromMyKad = (
+    myKadNumber: string
+): Date | null => {
+  const digits = myKadNumber.replace(/\D/g, "");
+
+  if (digits.length !== 12) {
+    return null;
+  }
+
+  const yy = Number(digits.slice(0, 2));
+  const mm = Number(digits.slice(2, 4));
+  const dd = Number(digits.slice(4, 6));
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentCentury = Math.floor(currentYear / 100) * 100;
+
+  let year = currentCentury + yy;
+
+  let date = new Date(year, mm - 1, dd);
+
+  if (date > today) {
+    year -= 100;
+
+    date = new Date(year, mm - 1, dd);
+  }
+
+  const isValidDate =
+      date.getFullYear() === year &&
+      date.getMonth() === mm - 1 &&
+      date.getDate() === dd;
+
+  if (!isValidDate) {
+    return null;
+  }
+
+  return date;
+}
 
 const formatMobileNumber = (value: string) => {
   const digits = value.replace(/\D/g, "").slice(0, 11);
@@ -54,12 +84,37 @@ export default function RegisterPersonalStep({
     onBack,
     onContinue
 }: RegisterPersonalStepProps) {
+  const { t, i18n } = useTranslation();
+
+  const schema = useMemo(
+      () => registerPersonalSchema(t),
+      [t, i18n.resolvedLanguage]
+  );
+
+  const [dobDerivedFromMyKad, setDobDerivedFromMyKad] = useState(false);
+
+  const citizenshipOptions = useMemo(
+      () => [
+        {
+          label: t("auth.register.personal.malaysian"),
+          value: "malaysian",
+        },
+        {
+          label: t("auth.register.personal.nonMalaysian"),
+          value: "non_malaysian",
+        },
+      ],
+      [t, i18n.resolvedLanguage]
+  );
+
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    trigger,
+    setValue,
+    formState: { errors, submitCount },
   } = useForm<RegisterPersonalFormData>({
-    resolver: zodResolver(registerPersonalSchema),
+    resolver: zodResolver(schema),
     defaultValues: defaultValues ?? {
       fullName: "",
       myKadNumber: "",
@@ -69,19 +124,25 @@ export default function RegisterPersonalStep({
     },
   });
 
+  useEffect(() => {
+    if (submitCount > 0) {
+      void trigger();
+    }
+  }, [i18n.resolvedLanguage, submitCount, trigger]);
+
   return (
       <View>
         <View className="mb-8">
           <Text className="text-3xl font-bold text-foreground">
-            Personal Details
+            {t("auth.register.personal.title")}
           </Text>
 
           <Text className="mt-2 text-base leading-6 text-muted-foreground">
-            Tell us about the person who will receive aid recommendations.
+            {t("auth.register.personal.subtitle")}
           </Text>
 
           <Text className="mt-4 text-sm font-medium text-primary">
-            Step 2 of 4
+            {t("auth.register.personal.step")}
           </Text>
         </View>
 
@@ -91,8 +152,8 @@ export default function RegisterPersonalStep({
             name="fullName"
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
-                label="Full Name"
-                placeholder="Enter full name"
+                label={t("auth.register.personal.fullName")}
+                placeholder={t("auth.register.personal.fullNamePlaceholder")}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -109,10 +170,31 @@ export default function RegisterPersonalStep({
             name="myKadNumber"
             render={({ field: { onChange, onBlur, value } }) => (
                 <Input
-                  label="IC Number"
-                  placeholder="XXXXXX-XX-XXXX"
+                  label={t("auth.register.personal.icNumber")}
+                  placeholder={t("auth.register.personal.icNumberPlaceholder")}
                   value={value}
-                  onChangeText={(text) => onChange(formatMyKad(text))}
+                  onChangeText={(text) => {
+                    const formatted = formatMyKad(text);
+
+                    onChange(formatted);
+
+                    const dateOfBirth = getDobFromMyKad(formatted);
+
+                    if (dateOfBirth) {
+                      setValue(
+                          "dateOfBirth",
+                          dateOfBirth,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          }
+                      );
+
+                      setDobDerivedFromMyKad(true);
+                    } else {
+                      setDobDerivedFromMyKad(false);
+                    }
+                  }}
                   onBlur={onBlur}
                   error={errors.myKadNumber?.message}
                   keyboardType="number-pad"
@@ -125,14 +207,20 @@ export default function RegisterPersonalStep({
           <Controller
             control={control}
             name="dateOfBirth"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { value } }) => (
                 <DateInput
-                  label="Date of Birth"
+                  label={t("auth.register.personal.dateOfBirth")}
+                  placeholder={t("auth.register.personal.dobFromIc")}
                   value={value}
-                  onChange={onChange}
-                  minimumDate={new Date(1900, 0, 1)}
-                  maximumDate={new Date()}
+                  // minimumDate={new Date(1900, 0, 1)}
+                  // maximumDate={new Date()}
                   error={errors.dateOfBirth?.message}
+                  helperText={
+                    dobDerivedFromMyKad
+                      ? t("auth.register.personal.dobFromIc")
+                      : undefined
+                  }
+                  disabled
                   required
                 />
             )}
@@ -143,8 +231,8 @@ export default function RegisterPersonalStep({
             name="citizenship"
             render={({ field: { onChange, value, } }) => (
                 <Select
-                  label="Citizenship"
-                  title="Select citizenship"
+                  label={t("auth.register.personal.citizenship")}
+                  title={t("auth.register.personal.selectCitizenship")}
                   value={value}
                   onChange={onChange}
                   options={citizenshipOptions}
@@ -159,8 +247,8 @@ export default function RegisterPersonalStep({
             name="mobileNumber"
             render={({ field: { onChange, onBlur, value } }) => (
                 <Input
-                  label="Mobile Number"
-                  placeholder="012-3456789"
+                  label={t("auth.register.personal.mobileNumber")}
+                  placeholder={t("auth.register.personal.mobilePlaceholder")}
                   value={value}
                   onChangeText={(text) => onChange(formatMobileNumber(text))}
                   onBlur={onBlur}
@@ -179,7 +267,7 @@ export default function RegisterPersonalStep({
               className="min-h-12 flex-1 items-center justify-center rounded-xl border border-border bg-background"
             >
               <Text className="font-semibold text-foreground">
-                Back
+                {t("common.back")}
               </Text>
             </Pressable>
 
@@ -188,7 +276,7 @@ export default function RegisterPersonalStep({
                 fullWidth
                 onPress={handleSubmit(onContinue)}
               >
-                Continue
+                {t("common.continue")}
               </Button>
             </View>
           </View>
