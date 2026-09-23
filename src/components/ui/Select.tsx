@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { Check, ChevronDown, X } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
 export type SelectOption = {
   label: string;
@@ -25,13 +26,14 @@ export default function Select({
     value,
     options,
     onChange,
-    placeholder = "Select an option",
+    placeholder,
     error,
     helperText,
     required = false,
     disabled = false,
     title
 }: SelectProps) {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   const selectedOption = options.find(
@@ -42,6 +44,8 @@ export default function Select({
     onChange(selectedValue);
     setVisible(false);
   };
+
+  const displayPlaceholder = placeholder ?? t("common.selectOption");
 
   return (
       <View>
@@ -90,7 +94,7 @@ export default function Select({
                     : "text-base text-muted-foreground"
               }
           >
-            {selectedOption?.label ?? placeholder}
+            {selectedOption?.label ?? displayPlaceholder}
           </Text>
 
           <ChevronDown size={20} color="#626775"/>
@@ -114,22 +118,23 @@ export default function Select({
         >
           <View className="flex-1 justify-end bg-black/40">
             <Pressable
+              className="flex-1"
               onPress={() => setVisible(false)}
               hitSlop={8}
               accessibilityRole="button"
-              accessibilityLabel="Close selection"
+              accessibilityLabel={t("common.close")}
             />
               <View className="min-h-[70%] rounded-t-3xl bg-background px-5 pb-8 pt-5">
                 <View className="mb-4 flex-row items-center justify-between">
                   <Text className="text-lg font-semibold text-foreground">
-                    {title ?? label ?? "Select an option"}
+                    {title ?? label ?? t("common.selectOption")}
                   </Text>
 
                   <Pressable
                     onPress={() => setVisible(false)}
                     hitSlop={8}
                     accessibilityRole="button"
-                    accessibilityLabel="Close selection"
+                    accessibilityLabel={t("common.close")}
                   >
                     <X size={22} color="#626775" />
                   </Pressable>
