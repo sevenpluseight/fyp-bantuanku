@@ -27,7 +27,6 @@ export default function DateInput({
     required = false,
     minimumDate,
     maximumDate,
-    defaultPickerDate,
     disabled = false
 }: DateInputProps) {
   const [showPicker, setShowPicker] = useState(false);
