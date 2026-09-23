@@ -59,9 +59,9 @@ export const registerPersonalSchema = z.object({
           "Enter a valid 12-digit IC number."
       ),
 
-  dateOfBirth: z
-      .string()
-      .min(1, "Date of birth is required."),
+  dateOfBirth: z.date({
+    error: "Date of birth is required.",
+  }),
 
   citizenship: z
       .string()
@@ -70,7 +70,17 @@ export const registerPersonalSchema = z.object({
   mobileNumber: z
       .string()
       .trim()
-      .min(1, "Mobile number is required."),
+      .min(1, "Mobile number is required.")
+      .refine(
+          (value) => {
+            const digits = value.replace(/\D/g, "");
+
+            return /^01\d{8,9}$/.test(digits);
+          },
+          {
+            message: "Enter a valid Malaysian mobile number.",
+          }
+      ),
 });
 
 export type RegisterPersonalFormData = z.infer<typeof registerPersonalSchema>;
