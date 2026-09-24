@@ -3,13 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { LoginFormData, loginSchema } from "../../schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "../../lib/supabase";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../../navigation/types";
 import { useTranslation } from "react-i18next";
@@ -19,20 +13,14 @@ import Alert from "../../components/ui/Alert";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import AuthBackground from "../../components/auth/AuthBackground";
-import LanguageSwitcher from "../../components/i18n/LanguageSwitcher";
 
-type Props = NativeStackScreenProps<
-    AuthStackParamList,
-    "Login"
->;
+type Props = NativeStackScreenProps<AuthStackParamList, "Login">;
 
 export default function LoginScreen({
-                                      navigation,
-                                    }: Props) {
+                                      navigation
+                                    }: Props){
   const { t, i18n } = useTranslation();
-
-  const [authError, setAuthError] =
-      useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const schema = useMemo(
       () => loginSchema(t),
@@ -43,11 +31,7 @@ export default function LoginScreen({
     control,
     handleSubmit,
     trigger,
-    formState: {
-      errors,
-      isSubmitting,
-      submitCount,
-    },
+    formState: { errors, isSubmitting, submitCount },
   } = useForm<LoginFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -60,22 +44,15 @@ export default function LoginScreen({
     if (submitCount > 0) {
       void trigger();
     }
-  }, [
-    i18n.resolvedLanguage,
-    submitCount,
-    trigger,
-  ]);
+  }, [i18n.resolvedLanguage, submitCount, trigger]);
 
-  const onSubmit = async (
-      data: LoginFormData
-  ) => {
+  const onSubmit = async (data: LoginFormData) => {
     setAuthError(null);
 
-    const { error } =
-        await supabase.auth.signInWithPassword({
-          email: data.email,
-          password: data.password,
-        });
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
 
     if (error) {
       setAuthError(error.message);
@@ -86,20 +63,15 @@ export default function LoginScreen({
       <View className="flex-1 bg-background">
         <AuthBackground />
 
-        <Screen transparent scroll={false}>
+        <Screen
+            transparent
+            scroll={false}
+        >
           <KeyboardAvoidingView
               className="flex-1"
-              behavior={
-                Platform.OS === "ios"
-                    ? "padding"
-                    : "height"
-              }
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
             <View className="flex-1 justify-center">
-              <View className="mb-6">
-                <LanguageSwitcher />
-              </View>
-
               <View className="mb-8">
                 <Text className="text-center text-3xl font-bold text-foreground">
                   {t("auth.login.title")}
@@ -114,9 +86,7 @@ export default function LoginScreen({
                 {authError && (
                     <Alert
                         variant="error"
-                        title={t(
-                            "auth.login.unableToSignIn"
-                        )}
+                        title={t("auth.login.unableToSignIn")}
                     >
                       {authError}
                     </Alert>
@@ -125,26 +95,14 @@ export default function LoginScreen({
                 <Controller
                     control={control}
                     name="email"
-                    render={({
-                               field: {
-                                 onChange,
-                                 onBlur,
-                                 value,
-                               },
-                             }) => (
+                    render={({ field: { onChange, onBlur, value } }) => (
                         <Input
-                            label={t(
-                                "auth.login.email"
-                            )}
-                            placeholder={t(
-                                "auth.login.emailPlaceholder"
-                            )}
+                            label={t("auth.login.email")}
+                            placeholder={t("auth.login.emailPlaceholder")}
                             value={value}
                             onChangeText={onChange}
                             onBlur={onBlur}
-                            error={
-                              errors.email?.message
-                            }
+                            error={errors.email?.message}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -158,35 +116,21 @@ export default function LoginScreen({
                 <Controller
                     control={control}
                     name="password"
-                    render={({
-                               field: {
-                                 onChange,
-                                 onBlur,
-                                 value,
-                               },
-                             }) => (
+                    render={({ field: { onChange, onBlur, value } }) => (
                         <Input
-                            label={t(
-                                "auth.login.password"
-                            )}
-                            placeholder={t(
-                                "auth.login.passwordPlaceholder"
-                            )}
+                            label={t("auth.login.password")}
+                            placeholder={t("auth.login.passwordPlaceholder")}
                             value={value}
                             onChangeText={onChange}
                             onBlur={onBlur}
-                            error={
-                              errors.password?.message
-                            }
+                            error={errors.password?.message}
                             secureTextEntry
                             autoCapitalize="none"
                             autoCorrect={false}
                             autoComplete="current-password"
                             textContentType="password"
                             returnKeyType="done"
-                            onSubmitEditing={handleSubmit(
-                                onSubmit
-                            )}
+                            onSubmitEditing={handleSubmit(onSubmit)}
                             required
                         />
                     )}
@@ -195,9 +139,7 @@ export default function LoginScreen({
                 <Button
                     fullWidth
                     loading={isSubmitting}
-                    onPress={handleSubmit(
-                        onSubmit
-                    )}
+                    onPress={handleSubmit(onSubmit)}
                 >
                   {t("auth.login.signIn")}
                 </Button>
@@ -211,11 +153,7 @@ export default function LoginScreen({
 
                   <Pressable
                       accessibilityRole="link"
-                      onPress={() =>
-                          navigation.navigate(
-                              "Register"
-                          )
-                      }
+                      onPress={() => navigation.navigate("Register")}
                       hitSlop={8}
                   >
                     <Text className="text-sm font-semibold text-primary">
