@@ -72,6 +72,27 @@ const zh = {
           mobileNumber: "手机号码",
           mobilePlaceholder: "012-3456789",
         },
+
+        residence: {
+          title: "居住地址",
+          subtitle: "请填写援助领取者目前的居住地址。",
+          step: "第 3 步，共 4 步",
+
+          addressLine1: "地址第一行",
+          addressLine1Placeholder: "门牌／单位号码及街道",
+
+          addressLine2: "地址第二行",
+          addressLine2Placeholder: "建筑、公寓或住宅区",
+
+          postcode: "邮政编码",
+          postcodePlaceholder: "例如：50000",
+
+          city: "城市",
+          cityPlaceholder: "例如：Kuala Lumpur",
+
+          stateTerritory: "州属／联邦直辖区",
+          selectStateTerritory: "选择州属或联邦直辖区",
+        },
       },
     },
 
@@ -96,6 +117,14 @@ const zh = {
 
       mobileNumberRequired: "请输入手机号码。",
       mobileNumberInvalid: "请输入有效的马来西亚手机号码。",
+
+      addressLine1Required: "请输入地址第一行。",
+
+      postcodeRequired: "请输入邮政编码。",
+      postcodeInvalid: "请输入有效的 5 位数邮政编码。",
+
+      cityRequired: "请输入城市。",
+      stateTerritoryRequired: "请选择州属或联邦直辖区。",
     },
   },
 };

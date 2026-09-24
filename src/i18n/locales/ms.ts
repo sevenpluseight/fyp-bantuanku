@@ -73,6 +73,27 @@ const ms = {
           mobileNumber: "Nombor Telefon Bimbit",
           mobilePlaceholder: "012-3456789",
         },
+
+        residence: {
+          title: "Tempat Tinggal",
+          subtitle: "Beritahu kami tempat tinggal semasa penerima bantuan",
+          step: "Langkah 3 daripada 4",
+
+          addressLine1: "Alamat Baris 1",
+          addressLine1Placeholder: "Nombor rumah/unit and jalan",
+
+          addressLine2: "Alamat Baris 2",
+          addressLine2Placeholder: "Bangunan, apartmen atau kawasan perumahan",
+
+          postcode: "Poskod",
+          postcodePlaceholder: "cth. 50000",
+
+          city: "Bandar",
+          cityPlaceholder: "cth. Kuala Lumpur",
+
+          stateTerritory: "Negeri / Wilayah Persekutuan",
+          selectStateTerritory: "Pilih negeri atau Wilayah Persekutuan",
+        },
       },
     },
 
@@ -97,6 +118,14 @@ const ms = {
 
       mobileNumberRequired: "Nombor telefon bimbit diperlukan.",
       mobileNumberInvalid: "Masukkan nombor telefon bimbit Malaysia yang sah.",
+
+      addressLine1Required: "Alamat baris 1 diperlukan.",
+
+      postcodeRequired: "Poskod diperlukan.",
+      postcodeInvalid: "Masukkan poskod 5 digit yang sah.",
+
+      cityRequired: "Bandar diperlukan.",
+      stateTerritoryRequired: "Negeri atau Wilayah Persekutuan diperlukan.",
     },
   },
 };

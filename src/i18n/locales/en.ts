@@ -73,6 +73,27 @@ const en = {
           mobileNumber: "Mobile Number",
           mobilePlaceholder: "012-3456789",
         },
+
+        residence: {
+          title: "Residence",
+          subtitle: "Tell us where the person receiving aid currently lives.",
+          step: "Step 3 of 4",
+
+          addressLine1: "Address Line 1",
+          addressLine1Placeholder: "House/unit number and street",
+
+          addressLine2: "Address Line 2",
+          addressLine2Placeholder: "Building, apartment or neighborhood",
+
+          postcode: "Postcode",
+          postcodePlaceholder: "e.g., 50000",
+
+          city: "City",
+          cityPlaceholder: "e.g., Kuala Lumpur",
+
+          stateTerritory: "State / Federal Territory",
+          selectStateTerritory: "Select state or Federal Territory",
+        },
       },
     },
 
@@ -97,6 +118,14 @@ const en = {
 
       mobileNumberRequired: "Mobile number is required.",
       mobileNumberInvalid: "Enter a valid Malaysian mobile number.",
+
+      addressLine1Required: "Address line 1 is required.",
+
+      postcodeRequired: "Postcode is required.",
+      postcodeInvalid: "Enter a valid 5-digit postcode.",
+
+      cityRequired: "City is required.",
+      stateTerritoryRequired: "State/Territory is required.",
     },
   },
 };
