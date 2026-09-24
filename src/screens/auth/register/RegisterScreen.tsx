@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../../../navigation/types";
 import { useState } from "react";
-import { RegisterFormData, RegisterPersonalFormData } from "../../../schemas/auth";
+import { RegisterFormData, RegisterPersonalFormData, RegisterResidenceFormData } from "../../../schemas/auth";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -9,7 +9,7 @@ import AuthBackground from "../../../components/auth/AuthBackground";
 import Screen from "../../../components/layout/Screen";
 import RegisterAccountStep from "./RegisterAccountStep";
 import RegisterPersonalStep from "./RegisterPersonalStep";
-
+import RegisterResidenceStep from "./RegisterResidenceStep";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
 
@@ -29,6 +29,11 @@ export default function RegisterScreen({
       setPersonalData,
   ] = useState<RegisterPersonalFormData | undefined>();
 
+  const [
+      residenceData,
+      setResidenceData,
+  ] = useState<RegisterResidenceFormData | undefined>();
+
   const handleAccountContinue = (
       data: RegisterFormData
   )=> {
@@ -41,6 +46,13 @@ export default function RegisterScreen({
   ) => {
     setPersonalData(data);
     setStep(3);
+  }
+
+  const handleResidenceContinue = (
+      data: RegisterResidenceFormData
+  ) => {
+    setResidenceData(data);
+    setStep(4);
   }
 
   return (
@@ -74,12 +86,22 @@ export default function RegisterScreen({
                 </View>
             )}
 
-          {step === 2 && (
+            {step === 2 && (
+                  <View className="flex-1 justify-center">
+                    <RegisterPersonalStep
+                      defaultValues={personalData}
+                      onBack={() => setStep(1)}
+                      onContinue={handlePersonalContinue}
+                    />
+                  </View>
+              )}
+
+            {step === 3 && (
                 <View className="flex-1 justify-center">
-                  <RegisterPersonalStep
-                    defaultValues={personalData}
-                    onBack={() => setStep(1)}
-                    onContinue={handlePersonalContinue}
+                  <RegisterResidenceStep
+                    defaultValues={residenceData}
+                    onBack={() => setStep(2)}
+                    onContinue={handleResidenceContinue}
                   />
                 </View>
             )}
