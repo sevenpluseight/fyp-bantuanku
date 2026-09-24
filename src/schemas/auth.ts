@@ -85,3 +85,33 @@ export const registerPersonalSchema = (t: TFunction) => z.object({
 });
 
 export type RegisterPersonalFormData = z.infer<ReturnType<typeof registerPersonalSchema>>;
+
+export const registerResidenceSchema = (t: TFunction) => z.object({
+  addressLine1: z
+      .string()
+      .trim()
+      .min(1, t("validation.addressLine1Required")),
+
+  addressLine2: z
+      .string()
+      .trim()
+      .optional(),
+
+  postcode: z
+      .string()
+      .trim()
+      .min(1, t("validation.postcodeRequired"))
+      .regex(/^\d{5}$/, t("validation.postcodeInvalid")),
+
+  city: z
+      .string()
+      .trim()
+      .min(1, t("validation.cityRequired")),
+
+  stateTerritory: z
+      .string()
+      .trim()
+      .min(1, t("validation.stateTerritoryRequired")),
+});
+
+export type RegisterResidenceFormData = z.infer<ReturnType<typeof registerResidenceSchema>>;
