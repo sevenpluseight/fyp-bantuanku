@@ -2,7 +2,7 @@ import { useState } from "react";
 import DateTimePicker, { DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
 import { Platform, Pressable, Text, View } from "react-native";
 import { CalendarDays } from "lucide-react-native";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 type DateInputProps = {
   label?: string;

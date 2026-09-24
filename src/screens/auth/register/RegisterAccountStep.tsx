@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
-import {useEffect, useMemo} from "react";
+import { useEffect, useMemo } from "react";
 
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
