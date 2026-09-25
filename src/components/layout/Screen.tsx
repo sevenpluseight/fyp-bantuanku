@@ -5,16 +5,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export type ScreenProps = ViewProps & {
   children: ReactNode;
   scroll?: boolean;
+  transparent?: boolean;
 };
 
 export default function Screen({
     children,
     scroll = true,
+    transparent = false,
     className = "",
     ...props
 }: ScreenProps) {
   return (
-      <SafeAreaView className="flex-1 bg-background">
+      <SafeAreaView className={`flex-1 ${transparent ? "bg-transparent" : "bg-background"}`}>
         {scroll ? (
             <ScrollView
               className="flex-1"
