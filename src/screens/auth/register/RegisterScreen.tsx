@@ -1,7 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "../../../navigation/types";
 import { useState } from "react";
-import { RegisterFormData, RegisterPersonalFormData, RegisterResidenceFormData } from "../../../schemas/auth";
+import {
+  RegisterFormData,
+  RegisterHouseholdIncomeFormData,
+  RegisterPersonalFormData,
+  RegisterResidenceFormData
+} from "../../../schemas/auth";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -10,6 +15,7 @@ import Screen from "../../../components/layout/Screen";
 import RegisterAccountStep from "./RegisterAccountStep";
 import RegisterPersonalStep from "./RegisterPersonalStep";
 import RegisterResidenceStep from "./RegisterResidenceStep";
+import RegisterHouseholdIncomeStep from "./RegisterHouseholdIncomeStep";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
 
@@ -34,6 +40,11 @@ export default function RegisterScreen({
       setResidenceData,
   ] = useState<RegisterResidenceFormData | undefined>();
 
+  const [
+      householdMemberIncomeData,
+      setHouseholdMemberIncomeData,
+  ] = useState<RegisterHouseholdIncomeFormData | undefined>();
+
   const handleAccountContinue = (
       data: RegisterFormData
   )=> {
@@ -53,6 +64,14 @@ export default function RegisterScreen({
   ) => {
     setResidenceData(data);
     setStep(4);
+  }
+
+  const handleHouseholdIncomeComplete = (
+      data: RegisterHouseholdIncomeFormData
+  ) => {
+    setHouseholdMemberIncomeData(data);
+
+    // TODO-1: Supabase registration + profile persistence
   }
 
   return (
@@ -102,6 +121,16 @@ export default function RegisterScreen({
                     defaultValues={residenceData}
                     onBack={() => setStep(2)}
                     onContinue={handleResidenceContinue}
+                  />
+                </View>
+            )}
+
+            {step === 4 && (
+                <View className="flex-1 justify-center">
+                  <RegisterHouseholdIncomeStep
+                    defaultValues={householdMemberIncomeData}
+                    onBack={() => setStep(3)}
+                    onComplete={handleHouseholdIncomeComplete}
                   />
                 </View>
             )}
