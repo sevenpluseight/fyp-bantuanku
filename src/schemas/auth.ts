@@ -115,3 +115,78 @@ export const registerResidenceSchema = (t: TFunction) => z.object({
 });
 
 export type RegisterResidenceFormData = z.infer<ReturnType<typeof registerResidenceSchema>>;
+
+export const registerHouseholdIncomeSchema = (t: TFunction) => {
+  const householdMemberSchema = z.object({
+    fullName: z
+        .string()
+        .trim()
+        .min(1, t("validation.householdMemberNameRequired")),
+
+    relationship: z
+        .string()
+        .trim()
+        .min(1, t("validation.relationshipRequired")),
+
+    dateOfBirth: z
+        .date()
+        .nullable()
+        .refine(
+            (value) => value !== null,
+            {
+              message: t("validation.householdMemberDobRequired")
+            },
+        ),
+  });
+
+  return z.object({
+    employmentStatus: z
+        .string()
+        .trim()
+        .min(1, t("validation.employmentStatusRequired")),
+
+    incomeSource: z
+        .string()
+        .trim()
+        .min(1, t("validation.incomeSourceRequired")),
+
+    personalMonthlyIncome: z
+        .string()
+        .trim()
+        .min(1, t("validation.personalMonthlyIncomeRequired"))
+        .refine(
+            (value) => {
+              const amount = Number(value)
+
+
+              return (
+                  Number.isFinite(amount) && amount >= 0
+              );
+            },
+            {
+              message: t("validation.monthlyIncomeInvalid")
+            },
+        ),
+
+    householdMonthlyIncome: z
+        .string()
+        .trim()
+        .min(1, t("validation.householdMonthlyIncomeRequired"))
+        .refine(
+            (value) => {
+              const amount = Number(value)
+
+              return (
+                  Number.isFinite(amount) && amount >= 0
+              );
+            },
+            {
+              message: t("validation.monthlyIncomeInvalid")
+            },
+        ),
+
+    householdMembers: z.array(householdMemberSchema),
+  });
+};
+
+export type RegisterHouseholdIncomeFormData = z.input<ReturnType<typeof registerHouseholdIncomeSchema>>;
