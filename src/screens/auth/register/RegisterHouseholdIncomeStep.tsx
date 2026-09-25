@@ -169,13 +169,13 @@ export default function RegisterHouseholdIncomeStep({
       () => new Date(), []
   );
 
-  const defaultDateOfBirth = useMemo(() => {
-    const date = new Date();
-
-    date.setFullYear(date.getFullYear() - 30);
-
-    return date;
-  }, []);
+  // const defaultDateOfBirth = useMemo(() => {
+  //   const date = new Date();
+  //
+  //   date.setFullYear(date.getFullYear() - 30);
+  //
+  //   return date;
+  // }, []);
 
   return (
       <View>
