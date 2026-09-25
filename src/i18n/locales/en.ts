@@ -33,10 +33,16 @@ const en = {
       },
 
       register: {
+        progress: {
+          account: "Account",
+          personal: "Personal",
+          residence: "Residence",
+          household: "Household",
+        },
+
         account: {
           title: "Create Account",
           subtitle: "Create your account to get started.",
-          step: "Step 1 of 4",
 
           email: "Email",
           emailPlaceholder: "Enter your email",
@@ -54,7 +60,6 @@ const en = {
         personal: {
           title: "Personal Details",
           subtitle: "Tell us about the person who will receive aid recommendations.",
-          step: "Step 2 of 4",
 
           fullName: "Full Name",
           fullNamePlaceholder: "Enter full name",
@@ -77,7 +82,6 @@ const en = {
         residence: {
           title: "Residence",
           subtitle: "Tell us where the person receiving aid currently lives.",
-          step: "Step 3 of 4",
 
           addressLine1: "Address Line 1",
           addressLine1Placeholder: "House/unit number and street",
@@ -93,6 +97,68 @@ const en = {
 
           stateTerritory: "State / Federal Territory",
           selectStateTerritory: "Select state or Federal Territory",
+        },
+
+        householdIncome: {
+          title: "Household & Income",
+          subtitle: "Tell us about the aid recipient's household and income.",
+
+          employmentStatus: "Employment Status",
+          selectEmploymentStatus: "Select employment status",
+
+          employmentStatusOptions: {
+            employed: "Employed",
+            selfEmployed: "Self-employed",
+            unemployed: "Unemployed",
+            retired: "Retired",
+            notWorking: "Not working",
+          },
+
+          incomeSource: "Income Source",
+          selectIncomeSource: "Select income source",
+
+          incomeSourceOptions: {
+            salary: "Salary",
+            selfEmployment: "Self-employment",
+            pension: "Pension",
+            governmentAssistance: "Government assistance",
+            familySupport: "Family support",
+            savings: "Savings",
+            other: "Other",
+            noIncome: "No income",
+          },
+
+          personalMonthlyIncome: "Personal Monthly Income (RM)",
+          householdMonthlyIncome: "Gross Monthly Household Income (RM)",
+
+          householdMembers: "Household Members",
+          householdMembersHelper: "Add other people who live in the same household as the aid recipient.",
+
+          householdMember: "Household Member {{number}}",
+
+          memberFullName: "Full Name",
+          memberFullNamePlaceholder: "Enter household member's full name",
+
+          relationship: "Relationship",
+          selectRelationship: "Select relationship",
+
+          relationshipOptions: {
+            spouse: "Spouse",
+            child: "Child",
+            parent: "Parent",
+            sibling: "Sibling",
+            grandchild: "Grandchild",
+            other: "Other",
+          },
+
+          memberDateOfBirth: "Date of Birth",
+
+          addHouseholdMember: "Add Household Member",
+          removeHouseholdMember: "Remove household member",
+
+          livingAloneHelper: "If the aid recipient lives alone, you do not need to add a household member.",
+
+          complete: "Complete",
         },
       },
     },
@@ -126,6 +192,18 @@ const en = {
 
       cityRequired: "City is required.",
       stateTerritoryRequired: "State/Territory is required.",
+
+      employmentStatusRequired: "Employment status is required.",
+
+      incomeSourceRequired: "Income source is required.",
+      personalMonthlyIncomeRequired: "Personal monthly income is required.",
+      householdMonthlyIncomeRequired: "Gross monthly household income is required.",
+      monthlyIncomeInvalid: "Enter a valid monthly income.",
+
+      householdMemberNameRequired: "Household member's name is required.",
+      relationshipRequired: "Relationship is required.",
+
+      householdMemberDobRequired: "Household member's date of birth is required.",
     },
   },
 };

@@ -33,10 +33,16 @@ const ms = {
       },
 
       register: {
+        progress: {
+          account: "Akaun",
+          personal: "Peribadi",
+          residence: "Alamat",
+          household: "Isi Rumah",
+        },
+
         account: {
           title: "Cipta Akaun",
           subtitle: "Cipta akaun anda untuk bermula.",
-          step: "Langkah 1 daripada 4",
 
           email: "E-mel",
           emailPlaceholder: "Masukkan e-mel anda",
@@ -54,7 +60,6 @@ const ms = {
         personal: {
           title: "Maklumat Peribadi",
           subtitle: "Beritahu kami tentang individu yang akan menerima cadangan bantuan.",
-          step: "Langkah 2 daripada 4",
 
           fullName: "Nama Penuh",
           fullNamePlaceholder: "Masukkan nama penuh",
@@ -77,7 +82,6 @@ const ms = {
         residence: {
           title: "Tempat Tinggal",
           subtitle: "Beritahu kami tempat tinggal semasa penerima bantuan",
-          step: "Langkah 3 daripada 4",
 
           addressLine1: "Alamat Baris 1",
           addressLine1Placeholder: "Nombor rumah/unit and jalan",
@@ -93,6 +97,68 @@ const ms = {
 
           stateTerritory: "Negeri / Wilayah Persekutuan",
           selectStateTerritory: "Pilih negeri atau Wilayah Persekutuan",
+        },
+
+        householdIncome: {
+          title: "Isi Rumah & Pendapatan",
+          subtitle: "Beritahu kami tentang isi rumah dan pendapatan penerima bantuan.",
+
+          employmentStatus: "Status Pekerjaan",
+          selectEmploymentStatus: "Pilih status pekerjaan",
+
+          employmentStatusOptions: {
+            employed: "Bekerja",
+            selfEmployed: "Bekerja sendiri",
+            unemployed: "Menganggur",
+            retired: "Bersara",
+            notWorking: "Tidak bekerja",
+          },
+
+          incomeSource: "Sumber Pendapatan",
+          selectIncomeSource: "Pilih sumber pendapatan",
+
+          incomeSourceOptions: {
+            salary: "Gaji",
+            selfEmployment: "Pendapatan bekerja sendiri",
+            pension: "Pencen",
+            governmentAssistance: "Bantuan kerajaan",
+            familySupport: "Sokongan keluarga",
+            savings: "Simpanan",
+            other: "Lain-lain",
+            noIncome: "Tiada pendapatan",
+          },
+
+          personalMonthlyIncome: "Pendapatan Bulanan Peribadi (RM)",
+          householdMonthlyIncome: "Pendapatan Kasar Bulanan Isi Rumah (RM)",
+
+          householdMembers: "Ahli Isi Rumah",
+          householdMembersHelper: "Tambah individu lain yang tinggal dalam isi rumah yang sama dengan penerima bantuan.",
+
+          householdMember: "Ahli Isi Rumah {{number}}",
+
+          memberFullName: "Nama Penuh",
+          memberFullNamePlaceholder: "Masukkan nama penuh ahli isi rumah",
+
+          relationship: "Hubungan",
+          selectRelationship: "Pilih hubungan",
+
+          relationshipOptions: {
+            spouse: "Pasangan",
+            child: "Anak",
+            parent: "Ibu atau bapa",
+            sibling: "Adik-beradik",
+            grandchild: "Cucu",
+            other: "Lain-lain",
+          },
+
+          memberDateOfBirth: "Tarikh Lahir",
+
+          addHouseholdMember: "Tambah Ahli Isi Rumah",
+          removeHouseholdMember: "Buang ahli isi rumah",
+
+          livingAloneHelper: "Jika penerima bantuan tinggal bersendirian, anda tidak perlu menambah ahli isi rumah.",
+
+          complete: "Selesai",
         },
       },
     },
@@ -126,6 +192,18 @@ const ms = {
 
       cityRequired: "Bandar diperlukan.",
       stateTerritoryRequired: "Negeri atau Wilayah Persekutuan diperlukan.",
+
+      employmentStatusRequired: "Status pekerjaan diperlukan.",
+
+      incomeSourceRequired: "Sumber pendapatan diperlukan.",
+      personalMonthlyIncomeRequired: "Pendapatan bulanan peribadi diperlukan.",
+      householdMonthlyIncomeRequired: "Pendapatan kasar bulanan isi rumah diperlukan.",
+      monthlyIncomeInvalid: "Masukkan pendapatan bulanan yang sah.",
+
+      householdMemberNameRequired: "Nama ahli isi rumah diperlukan.",
+      relationshipRequired: "Hubungan diperlukan.",
+
+      householdMemberDobRequired: "Tarikh lahir ahli isi rumah diperlukan.",
     },
   },
 };
