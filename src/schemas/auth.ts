@@ -1,5 +1,10 @@
 import { z } from "zod";
 import { TFunction } from "i18next";
+import {
+  CITIZENSHIP_VALUES, EMPLOYMENT_STATUS_VALUES,
+  HOUSEHOLD_RELATIONSHIP_VALUES, INCOME_SOURCE_VALUES,
+  STATE_TERRITORY_VALUES
+} from "../constants/registration";
 
 export const loginSchema = (t: TFunction) => z.object({
   email: z
@@ -60,13 +65,19 @@ export const registerPersonalSchema = (t: TFunction) => z.object({
           t("validation.myKadNumberInvalid")
       ),
 
-  dateOfBirth: z.date({
-    error: t("validation.dateOfBirthRequired"),
-  }),
+  dateOfBirth: z
+      .date()
+      .optional()
+      .refine(
+          (value) => value !== undefined,
+          {
+            message: t("validation.dateOfBirthRequired"),
+          }
+      ),
 
-  citizenship: z
-      .string()
-      .min(1, t("validation.citizenshipRequired")),
+  citizenship: z.enum(CITIZENSHIP_VALUES, {
+    error: t("validation.citizenshipRequired")
+  }),
 
   mobileNumber: z
       .string()
@@ -84,7 +95,7 @@ export const registerPersonalSchema = (t: TFunction) => z.object({
       ),
 });
 
-export type RegisterPersonalFormData = z.infer<ReturnType<typeof registerPersonalSchema>>;
+export type RegisterPersonalFormData = z.input<ReturnType<typeof registerPersonalSchema>>;
 
 export const registerResidenceSchema = (t: TFunction) => z.object({
   addressLine1: z
@@ -109,12 +120,19 @@ export const registerResidenceSchema = (t: TFunction) => z.object({
       .min(1, t("validation.cityRequired")),
 
   stateTerritory: z
-      .string()
-      .trim()
-      .min(1, t("validation.stateTerritoryRequired")),
+      .union([
+        z.literal(""),
+        z.enum(STATE_TERRITORY_VALUES),
+      ])
+      .refine(
+          (value) => value !== "",
+          {
+            message: t("validation.stateTerritoryRequired"),
+          }
+      ),
 });
 
-export type RegisterResidenceFormData = z.infer<ReturnType<typeof registerResidenceSchema>>;
+export type RegisterResidenceFormData = z.input<ReturnType<typeof registerResidenceSchema>>;
 
 export const registerHouseholdIncomeSchema = (t: TFunction) => {
   const householdMemberSchema = z.object({
@@ -124,9 +142,16 @@ export const registerHouseholdIncomeSchema = (t: TFunction) => {
         .min(1, t("validation.householdMemberNameRequired")),
 
     relationship: z
-        .string()
-        .trim()
-        .min(1, t("validation.relationshipRequired")),
+        .union([
+          z.literal(""),
+          z.enum(HOUSEHOLD_RELATIONSHIP_VALUES),
+        ])
+        .refine(
+            (value) => value !== "",
+            {
+              message: t("validation.relationshipRequired"),
+            }
+        ),
 
     dateOfBirth: z
         .date()
@@ -141,14 +166,28 @@ export const registerHouseholdIncomeSchema = (t: TFunction) => {
 
   return z.object({
     employmentStatus: z
-        .string()
-        .trim()
-        .min(1, t("validation.employmentStatusRequired")),
+        .union([
+          z.literal(""),
+          z.enum(EMPLOYMENT_STATUS_VALUES),
+        ])
+        .refine(
+            (value) => value !== "",
+            {
+              message: t("validation.employmentStatusRequired"),
+            }
+        ),
 
     incomeSource: z
-        .string()
-        .trim()
-        .min(1, t("validation.incomeSourceRequired")),
+        .union([
+          z.literal(""),
+          z.enum(INCOME_SOURCE_VALUES),
+        ])
+        .refine(
+            (value) => value !== "",
+            {
+              message: t("validation.incomeSourceRequired"),
+            }
+        ),
 
     personalMonthlyIncome: z
         .string()
