@@ -251,12 +251,6 @@ export const completeRegistration = async ({
     );
 
   if (registrationError) {
-    if (__DEV__) {
-      console.error(
-          "[REGISTRATION] Profile creation failed:", registrationError
-      );
-    }
-
     const isDuplicateIdentificationNumber =
         registrationError.code === "23505" &&
         (
@@ -269,10 +263,22 @@ export const completeRegistration = async ({
         );
 
     if (isDuplicateIdentificationNumber) {
+      if (__DEV__) {
+        console.log(
+            "[REGISTRATION] Identification number already registered"
+        );
+      }
+
       throw new RegistrationError(
           "identificationNumberExists",
           2,
           "Identification number already exists."
+      );
+    }
+
+    if (__DEV__) {
+      console.error(
+          "[REGISTRATION] Profile creation failed:", registrationError
       );
     }
 
