@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pressable, Text, View } from "react-native";
+import { STATE_TERRITORY_MAP, STATE_TERRITORY_VALUES, StateTerritoryValue } from "../../../constants/registration";
 
 import Input from "../../../components/ui/Input";
 import Select from "../../../components/ui/Select";
@@ -25,76 +26,28 @@ export default function RegisterResidenceStep({
 
   const schema = useMemo(
       () => registerResidenceSchema(t),
-      [t, i18n.language]
+      [t, i18n.resolvedLanguage]
   );
 
-  const stateTerritoryOptions = useMemo(
-      () => [
-        {
-          label: "Johor",
-          value: "johor",
-        },
-        {
-          label: "Kedah",
-          value: "kedah",
-        },
-        {
-          label: "Kelantan",
-          value: "kelantan",
-        },
-        {
-          label: "Melaka",
-          value: "melaka",
-        },
-        {
-          label: "Negeri Sembilan",
-          value: "negeri_sembilan",
-        },
-        {
-          label: "Pahang",
-          value: "pahang",
-        },
-        {
-          label: "Pulau Pinang",
-          value: "penang",
-        },
-        {
-          label: "Perak",
-          value: "perak",
-        },
-        {
-          label: "Perlis",
-          value: "perlis",
-        },
-        {
-          label: "Sabah",
-          value: "sabah",
-        },
-        {
-          label: "Sarawak",
-          value: "sarawak",
-        },
-        {
-          label: "Selangor",
-          value: "selangor",
-        },
-        {
-          label: "Terengganu",
-          value: "terengganu",
-        },
-        {
-          label: "W.P. Kuala Lumpur",
-          value: "kuala_lumpur",
-        },
-        {
-          label: "W.P. Labuan",
-          value: "labuan",
-        },
-        {
-          label: "W.P. Putrajaya",
-          value: "putrajaya",
-        },
-      ], []
+  const stateTerritoryOptions = useMemo<
+      {
+        label: string;
+        value: StateTerritoryValue;
+      }[]
+  >(
+      () =>
+          STATE_TERRITORY_VALUES.map((value) => ({
+            label:
+                value === "kuala_lumpur"
+                    ? "W.P. Kuala Lumpur"
+                    : value === "labuan"
+                        ? "W.P. Labuan"
+                        : value === "putrajaya"
+                            ? "W.P. Putrajaya"
+                            : STATE_TERRITORY_MAP[value],
+            value,
+          })),
+      []
   );
 
   const {
