@@ -5,13 +5,17 @@ import { supabase } from "../lib/supabase";
 /**
  * Authentication and registration state flow:
  *
- * onAuthStateChange handles Supabase Auth session changes. During registration, this can run immediately after
- * sign up before the registration RPC has finished creating the user's profile so registrationComplete may temporarily
- * remain false
+ * onAuthStateChange handles Supabase Auth session changes. During registration, this can run immediately
+ * after sign-up before the registration RPC has finished creating the user's profile, so registrationComplete may
+ * temporarily remain false.
  *
- * After the registration RPC succeeds, RegisterScreen explicitly calls refreshRegistrationStatus(). This checks the
- * current Supabase session again and re-checks the profile which allows the RootNavigator to switch from the auth flow
- * to MainTabNavigator
+ * After the registration RPC succeeds, RegisterScreen explicitly calls refreshRegistrationStatus().
+ * This checks the current Supabase session again and re-checks the profile which allows RootNavigator
+ * to switch from the auth flow to MainTabNavigator.
+ *
+ * Profile status checks may occasionally receive a transient PostgREST PGRST303 "JWT issued at future" response.
+ * In that case, the session is refreshed and the profile check is retried once. A failed profile check
+ * does not automatically mean that registration is incomplete.
  *
  * [Summary]
  * Auth session created -> onAuthStateChange -> profile may not exist yet
@@ -42,7 +46,8 @@ export default function AuthProvider({
   const [registrationComplete, setRegistrationComplete] = useState(false);
 
   const checkRegistrationStatus = async (
-      currentSession: Session | null
+      currentSession: Session | null,
+      retryOnJwtError = true
   ) => {
     if (!currentSession) {
       setRegistrationComplete(false);
@@ -59,9 +64,50 @@ export default function AuthProvider({
         .maybeSingle();
 
     if (error) {
-      console.error("Failed to check profile status:", error);
+      const isJwtIssuedAtFuture =
+          error.code === "PGRST303" &&
+          error.message === "JWT issued at future";
 
-      setRegistrationComplete(false);
+      if (isJwtIssuedAtFuture && retryOnJwtError) {
+        if (__DEV__) {
+          console.warn(
+              "[AUTH] JWT timing error detected. Refreshing session and retrying profile check."
+          );
+        }
+
+        const {
+          data: { session: refreshedSession },
+          error: refreshError
+        } = await supabase.auth.refreshSession();
+
+        if (refreshError || !refreshedSession) {
+          if (__DEV__) {
+            console.error(
+                "[AUTH] Failed to refresh session:",
+                refreshError
+            );
+          }
+
+          return;
+        }
+
+        setSession(refreshedSession);
+
+        await checkRegistrationStatus(
+            refreshedSession,
+            false
+        );
+
+        return;
+      }
+
+      if (__DEV__) {
+        console.error(
+            "[AUTH] Failed to check registration status:",
+            error
+        );
+      }
+
       return;
     }
 
