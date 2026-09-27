@@ -4,7 +4,7 @@ import { ActivityIndicator, View } from "react-native";
 import AuthNavigator from "./AuthNavigator";
 
 export default function RootNavigator() {
-  const { session, loading } = useAuth();
+  const { session, loading, registrationComplete } = useAuth();
 
   if (loading) {
     return (
@@ -17,7 +17,7 @@ export default function RootNavigator() {
     );
   }
 
-  if (!session) {
+  if (!session || !registrationComplete) {
     return <AuthNavigator />;
   }
 
