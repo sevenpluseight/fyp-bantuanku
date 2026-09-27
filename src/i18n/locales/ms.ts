@@ -30,9 +30,17 @@ const ms = {
         noAccount: "Belum mempunyai akaun?",
         createAccount: "Cipta akaun",
         unableToSignIn: "Tidak dapat log masuk",
+
+        errors: {
+          invalidCredentials: "E-mel atau kata laluan yang anda masukkan tidak betul.",
+          signInFailed: "Tidak dapat log masuk. Sila cuba lagi.",
+        },
       },
 
       register: {
+        registering: "Sedang mencipta akaun anda...",
+        registeringDescription: "Sila tunggu sementara kami menyediakan profil anda.",
+
         progress: {
           account: "Akaun",
           personal: "Peribadi",
@@ -159,6 +167,14 @@ const ms = {
           livingAloneHelper: "Jika penerima bantuan tinggal bersendirian, anda tidak perlu menambah ahli isi rumah.",
 
           complete: "Selesai",
+        },
+
+        errors: {
+          title: "Pendaftaran tidak dapat diselesaikan",
+          incompleteRegistration: "Sesetengah maklumat pendaftaran tidak lengkap. Sila semak langkah sebelumnya.",
+          languageUnavailable: "Bahasa pilihan anda tidak dapat dikenal pasti.",
+          registrationFailed: "Pendaftaran tidak dapat diselesaikan. Sila cuba lagi.",
+          identificationNumberExists: "Nombor kad pengenalan ini telah didaftarkan."
         },
       },
     },
