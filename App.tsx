@@ -14,7 +14,7 @@ import {getStoredLanguage} from "./src/i18n/language";
 import LanguageSelectionScreen from "./src/screens/language/LanguageSelectionScreen";
 
 // [DEV] Reset the language preference for first-launch testing
-localStorage.removeItem("bantuanku-language");
+// localStorage.removeItem("bantuanku-language");
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
