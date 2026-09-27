@@ -12,6 +12,7 @@ import Card from "../../../components/ui/Card";
 import DateInput from "../../../components/ui/DatePicker";
 import Button from "../../../components/ui/Button";
 import RegistrationProgress from "../../../components/auth/RegistrationProgress";
+import {EmploymentStatusValue, HouseholdRelationshipValue, IncomeSourceValue} from "../../../constants/registration";
 
 type RegisterHouseholdIncomeStepProps = {
   defaultValues?: RegisterHouseholdIncomeFormData;
@@ -31,7 +32,13 @@ export default function RegisterHouseholdIncomeStep({
       [t, i18n.resolvedLanguage]
   );
 
-  const employmentStatusOptions = useMemo(
+
+  const employmentStatusOptions = useMemo<
+      {
+        label: string;
+        value: EmploymentStatusValue;
+      }[]
+  >(
       () => [
         {
           label: t("auth.register.householdIncome.employmentStatusOptions.employed"),
@@ -56,7 +63,12 @@ export default function RegisterHouseholdIncomeStep({
       ], [t, i18n.resolvedLanguage]
   );
 
-  const incomeSourceOptions = useMemo(
+  const incomeSourceOptions = useMemo<
+      {
+        label: string;
+        value: IncomeSourceValue;
+      }[]
+  >(
       () => [
         {
           label: t("auth.register.householdIncome.incomeSourceOptions.salary"),
@@ -93,7 +105,12 @@ export default function RegisterHouseholdIncomeStep({
       ], [t, i18n.resolvedLanguage]
   );
 
-  const relationshipOptions = useMemo(
+  const relationshipOptions = useMemo<
+      {
+        label: string;
+        value: HouseholdRelationshipValue;
+      }[]
+  >(
       () => [
         {
           label: t("auth.register.householdIncome.relationshipOptions.spouse"),
