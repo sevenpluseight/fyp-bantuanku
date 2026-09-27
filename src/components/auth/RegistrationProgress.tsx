@@ -1,13 +1,15 @@
-import {useTranslation} from "react-i18next";
-import {Text, View} from "react-native";
-import {Check} from "lucide-react-native";
+import { useTranslation } from "react-i18next";
+import { Text, View } from "react-native";
+import { Check } from "lucide-react-native";
 
 type RegistrationProgressProps = {
   currentStep: number;
+  completed?: boolean;
 };
 
 export default function RegistrationProgress({
-    currentStep
+    currentStep,
+    completed = false
 }: RegistrationProgressProps) {
   const { t } = useTranslation();
 
@@ -23,8 +25,8 @@ export default function RegistrationProgress({
         <View className="flex-row items-start">
           {steps.map((label, index) => {
             const step = index + 1;
-            const isCompleted = step < currentStep;
-            const isCurrent = step === currentStep;
+            const isCompleted = completed || step < currentStep;
+            const isCurrent = !completed && step === currentStep;
 
             return (
                 <View
@@ -39,7 +41,7 @@ export default function RegistrationProgress({
                               h-0.5
                               w-full
                               ${
-                                step <= currentStep
+                                completed || step <= currentStep
                                     ? "bg-primary"
                                     : "bg-border"
                               }
@@ -91,7 +93,7 @@ export default function RegistrationProgress({
                               h-0.5
                               w-full
                               ${
-                                step < currentStep 
+                                completed || step < currentStep 
                                     ? "bg-primary"
                                     : "bg-border"
                               }
