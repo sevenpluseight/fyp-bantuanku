@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Pressable, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
+import { CitizenshipValue } from "../../../constants/registration";
 
 import Input from "../../../components/ui/Input";
 import Select from "../../../components/ui/Select";
@@ -15,6 +16,7 @@ type RegisterPersonalStepProps = {
   defaultValues?: RegisterPersonalFormData;
   onBack: () => void;
   onContinue: (data: RegisterPersonalFormData) => void;
+  myKadError?: string;
 };
 
 const formatMyKad = (value: string) => {
@@ -83,7 +85,8 @@ const formatMobileNumber = (value: string) => {
 export default function RegisterPersonalStep({
     defaultValues,
     onBack,
-    onContinue
+    onContinue,
+    myKadError
 }: RegisterPersonalStepProps) {
   const { t, i18n } = useTranslation();
 
@@ -92,9 +95,15 @@ export default function RegisterPersonalStep({
       [t, i18n.resolvedLanguage]
   );
 
-  const [dobDerivedFromMyKad, setDobDerivedFromMyKad] = useState(false);
+  const [dobDerivedFromMyKad, setDobDerivedFromMyKad] =
+      useState(defaultValues?.dateOfBirth !== undefined);
 
-  const citizenshipOptions = useMemo(
+  const citizenshipOptions = useMemo<
+      {
+        label: string;
+        value: CitizenshipValue;
+      }[]
+  >(
       () => [
         {
           label: t("auth.register.personal.malaysian"),
@@ -191,11 +200,20 @@ export default function RegisterPersonalStep({
 
                       setDobDerivedFromMyKad(true);
                     } else {
+                      setValue(
+                          "dateOfBirth",
+                          undefined,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          }
+                      );
+
                       setDobDerivedFromMyKad(false);
                     }
                   }}
                   onBlur={onBlur}
-                  error={errors.myKadNumber?.message}
+                  error={errors.myKadNumber?.message ?? myKadError}
                   keyboardType="number-pad"
                   maxLength={14}
                   required
