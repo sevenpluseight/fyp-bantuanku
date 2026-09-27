@@ -6,6 +6,7 @@ const zh = {
       done: "完成",
       close: "关闭",
       cancel: "取消",
+      ok: "确定",
 
       selectDate: "选择日期",
       selectOption: "请选择",
