@@ -30,9 +30,17 @@ const zh = {
         noAccount: "还没有账号？",
         createAccount: "创建账号",
         unableToSignIn: "无法登录",
+
+        errors: {
+          invalidCredentials: "您输入的电子邮箱或密码不正确。",
+          signInFailed: "无法登录，请重试。",
+        },
       },
 
       register: {
+        registering: "正在创建您的账户...",
+        registeringDescription: "请稍后，我们正在为您设置个人资料。",
+
         progress: {
           account: "账户",
           personal: "个人",
@@ -158,6 +166,14 @@ const zh = {
           livingAloneHelper: "如果援助领取者独居，则无需添加家庭成员。",
 
           complete: "完成",
+        },
+
+        errors: {
+          title: "无法完成注册。",
+          incompleteRegistration: "部分注册资料尚未填写完整，请检查之前的步骤。",
+          languageUnavailable: "无法确定您的首选语言。",
+          registrationFailed: "无法完成注册，请重试。",
+          identificationNumberExists: "此身份证号码已被注册。"
         },
       },
     },
