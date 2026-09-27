@@ -55,7 +55,15 @@ export default function LoginScreen({
     });
 
     if (error) {
-      setAuthError(error.message);
+      if (error.code === "invalid_credentials") {
+        setAuthError(
+            t("auth.login.errors.invalidCredentials")
+        );
+
+        return;
+      }
+
+      setAuthError(t("auth.login.errors.signInFailed"));
     }
   };
 
