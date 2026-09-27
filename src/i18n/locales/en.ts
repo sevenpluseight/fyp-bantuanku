@@ -30,9 +30,17 @@ const en = {
         noAccount: "Don't have an account?",
         createAccount: "Create account",
         unableToSignIn: "Unable to sign in",
+
+        errors: {
+          invalidCredentials: "The email or password you entered is incorrect.",
+          signInFailed: "Unable to sign in. Please try again.",
+        }
       },
 
       register: {
+        registering: "Creating your account...",
+        registeringDescription: "Please wait while we set up your profile.",
+
         progress: {
           account: "Account",
           personal: "Personal",
@@ -159,6 +167,14 @@ const en = {
           livingAloneHelper: "If the aid recipient lives alone, you do not need to add a household member.",
 
           complete: "Complete",
+        },
+
+        errors: {
+          title: "Unable to complete registration",
+          incompleteRegistration: "Some registration information is missing. Please review the previous steps.",
+          languageUnavailable: "Unable to determine your preferred language.",
+          registrationFailed: "Registration could not be completed. Please try again.",
+          identificationNumberExists: "This IC number is already registered."
         },
       },
     },
