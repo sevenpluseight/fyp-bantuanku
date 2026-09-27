@@ -6,6 +6,7 @@ const ms = {
       done: "Selesai",
       close: "Tutup",
       cancel: "Batal",
+      ok: "OK",
 
       selectDate: "Pilih tarikh",
       selectOption: "Pilih pilihan",
