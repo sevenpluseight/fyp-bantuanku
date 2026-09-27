@@ -6,6 +6,7 @@ const en = {
       done: "Done",
       close: "Close",
       cancel: "Cancel",
+      ok: "OK",
 
       selectDate: "Select a date",
       selectOption: "Select an option",
