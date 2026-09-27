@@ -60,7 +60,7 @@ export default function LoginScreen({
             t("auth.login.errors.invalidCredentials")
         );
 
-        return;
+      return;
       }
 
       setAuthError(t("auth.login.errors.signInFailed"));
