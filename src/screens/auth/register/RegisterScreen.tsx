@@ -105,28 +105,20 @@ export default function RegisterScreen({
 
       await refreshRegistrationStatus();
     } catch (error) {
-      console.error("Registration error:", error);
-
       if (
           error instanceof RegistrationError &&
           error.code === "identificationNumberExists"
       ) {
-        setMyKadError(
-            t(
-                "auth.register.errors.identificationNumberExists"
-            )
-        );
-
+        setMyKadError(t("auth.register.errors.identificationNumberExists"));
         setStep(2);
-
         return;
       }
 
-      setRegistrationError(
-          t(
-              "auth.register.errors.registrationFailed"
-          )
-      )
+      if (__DEV__) {
+        console.error("[REGISTRATION] Registration failed:", error);
+      }
+
+      setRegistrationError(t("auth.register.errors.registrationFailed"));
     } finally {
       setSubmitting(false);
     }
@@ -209,7 +201,7 @@ export default function RegisterScreen({
                     variant="error"
                     title={t("auth.register.errors.title")}
                     message={registrationError ?? undefined}
-                    confirmText={t("common.actions.ok")}
+                    confirmText={t("common.ok")}
                     onConfirm={() => setRegistrationError(null)}
                     onDismiss={() => setRegistrationError(null)}
                   />
