@@ -7,6 +7,8 @@ const en = {
       close: "Close",
       cancel: "Cancel",
       ok: "OK",
+      remove: "Remove",
+      complete: "Complete",
 
       selectDate: "Select a date",
       selectOption: "Select an option",
@@ -167,7 +169,10 @@ const en = {
 
           livingAloneHelper: "If the aid recipient lives alone, you do not need to add a household member.",
 
-          complete: "Complete",
+          removeMemberDialog: {
+            title: "Remove household member?",
+            message: "The information entered for this household member will be removed.",
+          }
         },
 
         errors: {
