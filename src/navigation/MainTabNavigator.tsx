@@ -7,6 +7,7 @@ import ProgramsScreen from "../screens/programs/ProgramsScreen";
 import ApplicationsScreen from "../screens/applications/ApplicationsScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import AnimatedTabIcon from "./AnimatedTabIcon";
+import { Platform } from "react-native";
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -23,7 +24,8 @@ export default function MainTabNavigator() {
 
           tabBarStyle: {
             borderTopColor: "#E2E5EA",
-            paddingTop: 8,
+            paddingTop: Platform.OS === "ios" ? 8 : 0,
+            paddingBottom: Platform.OS === "android" ? 6 : 0,
           },
 
           tabBarLabelStyle: {
