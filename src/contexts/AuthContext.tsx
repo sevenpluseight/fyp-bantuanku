@@ -70,7 +70,7 @@ export default function AuthProvider({
 
       if (isJwtIssuedAtFuture && retryOnJwtError) {
         if (__DEV__) {
-          console.warn(
+          console.log(
               "[AUTH] JWT timing error detected. Refreshing session and retrying profile check."
           );
         }
@@ -121,7 +121,9 @@ export default function AuthProvider({
     } = await supabase.auth.getSession();
 
     if (error) {
-      console.error("Failed to refresh registration status:", error);
+      if (__DEV__) {
+        console.error("[AUTH] Failed to refresh registration status:", error);
+      }
 
       return;
     }
@@ -142,7 +144,9 @@ export default function AuthProvider({
       }
 
       if (error) {
-        console.error("Failed to restore session:", error);
+        if (__DEV__) {
+          console.error("[AUTH] Failed to restore session:", error);
+        }
 
         setSession(null);
         setRegistrationComplete(false);
