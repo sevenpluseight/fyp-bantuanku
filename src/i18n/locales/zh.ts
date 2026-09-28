@@ -7,6 +7,8 @@ const zh = {
       close: "关闭",
       cancel: "取消",
       ok: "确定",
+      remove: "移除",
+      complete: "完成",
 
       selectDate: "选择日期",
       selectOption: "请选择",
@@ -166,7 +168,10 @@ const zh = {
 
           livingAloneHelper: "如果援助领取者独居，则无需添加家庭成员。",
 
-          complete: "完成",
+          removeMemberDialog: {
+            title: "移除家庭成员？",
+            message: "为此家庭成员填写的资料将会被移除。",
+          }
         },
 
         errors: {
