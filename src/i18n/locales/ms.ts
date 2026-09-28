@@ -7,6 +7,8 @@ const ms = {
       close: "Tutup",
       cancel: "Batal",
       ok: "OK",
+      remove: "Buang",
+      complete: "Selesai",
 
       selectDate: "Pilih tarikh",
       selectOption: "Pilih pilihan",
@@ -167,7 +169,10 @@ const ms = {
 
           livingAloneHelper: "Jika penerima bantuan tinggal bersendirian, anda tidak perlu menambah ahli isi rumah.",
 
-          complete: "Selesai",
+          removeMemberDialog: {
+            title: "Buang ahli isi rumah?",
+            message: "Maklumat yang dimasukkan untuk ahli isi rumah ini akan dibuang.",
+          }
         },
 
         errors: {
