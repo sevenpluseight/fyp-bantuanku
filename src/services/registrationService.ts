@@ -76,11 +76,6 @@ export const completeRegistration = async ({
   householdIncome,
   preferredLanguage
 }: CompleteRegistrationData) => {
-  if (__DEV__) {
-    console.log("[REGISTRATION] Starting registration");
-    console.log("[REGISTRATION] Validating registration data");
-  }
-
   if (!personal.dateOfBirth) {
     throw new Error("Date of Birth is required.");
   }
@@ -105,10 +100,6 @@ export const completeRegistration = async ({
     if (!member.dateOfBirth) {
       throw new Error("Household member date of birth is required.");
     }
-  }
-
-  if (__DEV__) {
-    console.log("[REGISTRATION] Registration data validated");
   }
 
   const email = account.email.trim().toLowerCase();
@@ -147,21 +138,7 @@ export const completeRegistration = async ({
 
     user = existingSession.user;
 
-    if (__DEV__) {
-      console.log(
-          "[REGISTRATION] Existing authenticated session detected"
-      );
-      console.log(
-          "[REGISTRATION] Skipping Auth account creation"
-      );
-    }
   } else {
-    if (__DEV__) {
-      console.log(
-          "[REGISTRATION] Creating Supabase Auth account"
-      );
-    }
-
     const {
       data: authData,
       error: authError,
@@ -189,15 +166,6 @@ export const completeRegistration = async ({
     }
 
     user = authData.user;
-
-    if (__DEV__) {
-      console.log(
-          "[REGISTRATION] Auth account created"
-      );
-      console.log(
-          "[REGISTRATION] Authenticated session established"
-      );
-    }
   }
 
   const householdMembers =
@@ -216,15 +184,6 @@ export const completeRegistration = async ({
           date_of_birth: formatDateForDatabase(member.dateOfBirth),
         }
       });
-
-  if (__DEV__) {
-    console.log(
-        "[REGISTRATION] Preparing profile data"
-    );
-    console.log(
-        "[REGISTRATION] Creating profile, address, financial profile, and household members"
-    );
-  }
 
   const { data: profileId, error: registrationError } =
     await supabase.rpc(
@@ -263,12 +222,6 @@ export const completeRegistration = async ({
         );
 
     if (isDuplicateIdentificationNumber) {
-      if (__DEV__) {
-        console.log(
-            "[REGISTRATION] Identification number already registered"
-        );
-      }
-
       throw new RegistrationError(
           "identificationNumberExists",
           2,
@@ -287,15 +240,6 @@ export const completeRegistration = async ({
 
   if (!profileId) {
     throw new Error("Registration completed without a profile ID");
-  }
-
-  if (__DEV__) {
-    console.log(
-        "[REGISTRATION] Profile created successfully"
-    );
-    console.log(
-        "[REGISTRATION] Registration completed successfully"
-    );
   }
 
   return {
