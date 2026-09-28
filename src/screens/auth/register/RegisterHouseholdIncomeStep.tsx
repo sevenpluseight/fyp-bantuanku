@@ -1,10 +1,10 @@
 import { RegisterHouseholdIncomeFormData, registerHouseholdIncomeSchema } from "../../../schemas/auth";
 import { useTranslation } from "react-i18next";
-import { useEffect, useMemo } from "react";
+import {useEffect, useMemo, useState} from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pressable, Text, View } from "react-native";
-import { Plus, Trash2 } from "lucide-react-native";
+import {ChevronDown, ChevronUp, Plus, Trash2} from "lucide-react-native";
 
 import Select from "../../../components/ui/Select";
 import Input from "../../../components/ui/Input";
@@ -13,6 +13,7 @@ import DateInput from "../../../components/ui/DatePicker";
 import Button from "../../../components/ui/Button";
 import RegistrationProgress from "../../../components/auth/RegistrationProgress";
 import {EmploymentStatusValue, HouseholdRelationshipValue, IncomeSourceValue} from "../../../constants/registration";
+import AlertDialog from "../../../components/ui/AlertDialog";
 
 type RegisterHouseholdIncomeStepProps = {
   defaultValues?: RegisterHouseholdIncomeFormData;
@@ -143,6 +144,7 @@ export default function RegisterHouseholdIncomeStep({
     control,
     handleSubmit,
     trigger,
+    watch,
     formState: {errors, submitCount}
   } = useForm<RegisterHouseholdIncomeFormData>({
     resolver: zodResolver(schema),
@@ -164,18 +166,49 @@ export default function RegisterHouseholdIncomeStep({
     name: "householdMembers"
   });
 
+  const householdMembers = watch("householdMembers");
+
+  const [expandedMemberIndex, setExpandedMemberIndex] =
+    useState<number | null>(
+        fields.length > 0 ? 0 : null
+    );
+
+  const [memberToRemove, setMemberToRemove] = useState<number | null>(null);
+
   useEffect(() => {
     if (submitCount > 0) {
       void trigger();
     }
   }, [i18n.resolvedLanguage, submitCount, trigger]);
 
+  useEffect(() => {
+    const householdMemberErrors = errors.householdMembers;
+
+    if (!householdMemberErrors) {
+      return;
+    }
+
+    const firstErrorIndex =
+        fields.findIndex(
+            (_, index) =>
+                errors.householdMembers?.[index] !== undefined
+        );
+
+    if (firstErrorIndex >= 0) {
+      setExpandedMemberIndex(firstErrorIndex);
+    }
+  }, [errors.householdMembers]);
+
   const addHouseholdMember = () => {
+    const newIndex = fields.length;
+
     append({
       fullName: "",
       relationship: "",
       dateOfBirth: null,
     });
+
+    setExpandedMemberIndex(newIndex);
   };
 
   const minimumDateOfBirth = useMemo(
@@ -186,13 +219,26 @@ export default function RegisterHouseholdIncomeStep({
       () => new Date(), []
   );
 
-  // const defaultDateOfBirth = useMemo(() => {
-  //   const date = new Date();
-  //
-  //   date.setFullYear(date.getFullYear() - 30);
-  //
-  //   return date;
-  // }, []);
+  const handleRemoveHouseholdMember = () => {
+    if (memberToRemove == null) {
+      return;
+    }
+
+    remove(memberToRemove);
+
+    if (expandedMemberIndex === memberToRemove) {
+      setExpandedMemberIndex(null);
+    } else if (
+        expandedMemberIndex !== null &&
+        expandedMemberIndex > memberToRemove
+    ) {
+      setExpandedMemberIndex(expandedMemberIndex - 1);
+    }
+
+    setMemberToRemove(null);
+  }
+
+  const handleCancelRemoveHouseholdMember = () => { setMemberToRemove(null) };
 
   return (
       <View>
@@ -301,75 +347,109 @@ export default function RegisterHouseholdIncomeStep({
                 className="gap-5"
               >
                 <View className="flex-row items-center justify-between">
-                  <Text className="text-base font-semibold text-foreground">
-                    {t(
-                        "auth.register.householdIncome.householdMember",
-                        { number: index + 1 }
+                  <Pressable
+                    className="flex-1 flex-row items-center justify-between"
+                    onPress={() => {
+                      setExpandedMemberIndex(
+                          expandedMemberIndex === index
+                            ? null
+                            : index
+                      );
+                    }}
+                    accessibilityRole="button"
+                  >
+                    <View className="flex-1 pr-3">
+                      <Text className="text-base font-semibold text-foreground">
+                        {householdMembers[index]?.fullName ||
+                          t(
+                              "auth.register.householdIncome.householdMember",
+                              { number: index + 1 }
+                          )}
+                      </Text>
+
+                        {householdMembers[index]?.relationship && (
+                            <Text className="mt-1 text-sm text-muted-foreground">
+                              {relationshipOptions.find(
+                                  (option) =>
+                                      option.value === householdMembers[index]?.relationship
+                              )?.label}
+                            </Text>
+                        )}
+                    </View>
+
+                    {expandedMemberIndex === index ? (
+                        <ChevronUp size={20} color="#626775" />
+                    ) : (
+                        <ChevronDown size={20} color="#626775" />
                     )}
-                  </Text>
+                  </Pressable>
 
                   <Pressable
-                    onPress={() => remove(index)}
+                    onPress={() => setMemberToRemove(index)}
                     accessibilityRole="button"
                     accessibilityLabel={t("auth.register.householdIncome.removeHouseholdMember")}
                     hitSlop={8}
-                    className="h-10 w-10 items-center justify-center rounded-full"
+                    className="ml-2 h-10 w-10 items-center justify-center rounded-full"
                   >
                     <Trash2 size={20} color="#F5222D" />
                   </Pressable>
                 </View>
 
-                <Controller
-                    control={control}
-                    name={`householdMembers.${index}.fullName`}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <Input
-                            label={t("auth.register.householdIncome.memberFullName")}
-                            placeholder={t("auth.register.householdIncome.memberFullNamePlaceholder")}
-                            value={value}
-                            onChangeText={onChange}
-                            onBlur={onBlur}
-                            error={errors.householdMembers?.[index]?.fullName?.message}
-                            autoCapitalize="words"
-                            autoCorrect={false}
-                            required
-                        />
-                    )}
-                />
+                {expandedMemberIndex === index && (
+                    <>
+                      <Controller
+                          control={control}
+                          name={`householdMembers.${index}.fullName`}
+                          render={({ field: { onChange, onBlur, value } }) => (
+                              <Input
+                                  label={t("auth.register.householdIncome.memberFullName")}
+                                  placeholder={t("auth.register.householdIncome.memberFullNamePlaceholder")}
+                                  value={value}
+                                  onChangeText={onChange}
+                                  onBlur={onBlur}
+                                  error={errors.householdMembers?.[index]?.fullName?.message}
+                                  autoCapitalize="words"
+                                  autoCorrect={false}
+                                  required
+                              />
+                          )}
+                      />
 
-                <Controller
-                    control={control}
-                    name={`householdMembers.${index}.relationship`}
-                    render={({ field: { onChange, value } }) => (
-                        <Select
-                            label={t("auth.register.householdIncome.relationship")}
-                            title={t("auth.register.householdIncome.selectRelationship")}
-                            value={value}
-                            onChange={onChange}
-                            options={relationshipOptions}
-                            error={errors.householdMembers?.[index]?.relationship?.message}
-                            required
-                        />
-                    )}
-                />
+                      <Controller
+                          control={control}
+                          name={`householdMembers.${index}.relationship`}
+                          render={({ field: { onChange, value } }) => (
+                              <Select
+                                  label={t("auth.register.householdIncome.relationship")}
+                                  title={t("auth.register.householdIncome.selectRelationship")}
+                                  value={value}
+                                  onChange={onChange}
+                                  options={relationshipOptions}
+                                  error={errors.householdMembers?.[index]?.relationship?.message}
+                                  required
+                              />
+                          )}
+                      />
 
 
 
-                <Controller
-                    control={control}
-                    name={`householdMembers.${index}.dateOfBirth`}
-                    render={({ field: { onChange, value } }) => (
-                        <DateInput
-                            label={t("auth.register.householdIncome.memberDateOfBirth")}
-                            value={value ?? undefined}
-                            onChange={onChange}
-                            minimumDate={minimumDateOfBirth}
-                            maximumDate={maximumDateOfBirth}
-                            error={errors.householdMembers?.[index]?.dateOfBirth?.message}
-                            required
-                        />
-                    )}
-                />
+                      <Controller
+                          control={control}
+                          name={`householdMembers.${index}.dateOfBirth`}
+                          render={({ field: { onChange, value } }) => (
+                              <DateInput
+                                  label={t("auth.register.householdIncome.memberDateOfBirth")}
+                                  value={value ?? undefined}
+                                  onChange={onChange}
+                                  minimumDate={minimumDateOfBirth}
+                                  maximumDate={maximumDateOfBirth}
+                                  error={errors.householdMembers?.[index]?.dateOfBirth?.message}
+                                  required
+                              />
+                          )}
+                      />
+                    </>
+                )}
               </Card>
           ))}
 
@@ -406,11 +486,23 @@ export default function RegisterHouseholdIncomeStep({
                 fullWidth
                 onPress={handleSubmit(onComplete)}
               >
-                {t("auth.register.householdIncome.complete")}
+                {t("common.complete")}
               </Button>
             </View>
           </View>
         </View>
+
+        <AlertDialog
+          visible={memberToRemove !== null}
+          variant="warning"
+          confirmVariant="destructive"
+          title={t("auth.register.householdIncome.removeMemberDialog.title")}
+          message={t("auth.register.householdIncome.removeMemberDialog.message")}
+          confirmText={t("common.remove")}
+          onConfirm={handleRemoveHouseholdMember}
+          onCancel={handleCancelRemoveHouseholdMember}
+          onDismiss={handleCancelRemoveHouseholdMember}
+        />
       </View>
   );
 }
