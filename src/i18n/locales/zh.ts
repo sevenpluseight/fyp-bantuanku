@@ -184,6 +184,63 @@ const zh = {
       },
     },
 
+    profile: {
+      title: "个人资料",
+      description: "管理您的个人及家庭资料。",
+
+      sections: {
+        personal: "个人",
+        householdFinancial: "家庭与财务",
+        contactResidence: "联系与住址",
+        preferences: "偏好设置",
+        account: "账户",
+      },
+
+      personalInformation: {
+        title: "个人资料",
+        description: "个人及人口资料",
+      },
+
+      household: {
+        title: "我的家庭",
+        youOnly: "仅您一人",
+        oneMember: "您 + 1 位家庭成员",
+        multipleMembers: "您 + {{count}} 位家庭成员",
+      },
+
+      incomeEmployment: {
+        title: "收入与就业",
+        noInformation: "就业资料",
+
+        status: {
+          employed: "受雇",
+          selfEmployed: "自雇",
+          unemployed: "失业",
+          retired: "退休",
+          notWorking: "没有工作",
+        },
+      },
+
+      residentialAddress: {
+        title: "居住地址",
+        noAddress: "尚未提供地址",
+      },
+
+      language: {
+        title: "语言",
+      },
+
+      account: {
+        signOut: "退出登录",
+      },
+
+      errors: {
+        loadTitle: "无法加载个人资料",
+        loadDescription: "无法加载您的个人资料。",
+        tryAgain: "重试",
+      },
+    },
+
     validation: {
       emailRequired: "请输入电子邮箱。",
       emailInvalid: "请输入有效的电子邮箱地址。",

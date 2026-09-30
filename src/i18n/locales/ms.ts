@@ -185,6 +185,63 @@ const ms = {
       },
     },
 
+    profile: {
+      title: "Profil",
+      description: "Urus maklumat peribadi dan isi rumah anda.",
+
+      sections: {
+        personal: "Peribadi",
+        householdFinancial: "Isi Rumah & Kewangan",
+        contactResidence: "Hubungan & Tempat Tinggal",
+        preferences: "Keutamaan",
+        account: "Akaun",
+      },
+
+      personalInformation: {
+        title: "Maklumat Peribadi",
+        description: "Maklumat peribadi dan demografi",
+      },
+
+      household: {
+        title: "Isi Rumah Saya",
+        youOnly: "Anda sahaja",
+        oneMember: "Anda + 1 ahli isi rumah",
+        multipleMembers: "Anda + {{count}} ahli isi rumah",
+      },
+
+      incomeEmployment: {
+        title: "Pendapatan & Pekerjaan",
+        noInformation: "Maklumat pekerjaan",
+
+        status: {
+          employed: "Bekerja",
+          selfEmployed: "Bekerja sendiri",
+          unemployed: "Menganggur",
+          retired: "Bersara",
+          notWorking: "Tidak bekerja",
+        },
+      },
+
+      residentialAddress: {
+        title: "Alamat Kediaman",
+        noAddress: "Tiada alamat diberikan",
+      },
+
+      language: {
+        title: "Bahasa",
+      },
+
+      account: {
+        signOut: "Log Keluar",
+      },
+
+      errors: {
+        loadTitle: "Tidak dapat memuatkan profil",
+        loadDescription: "Maklumat profil anda tidak dapat dimuatkan.",
+        tryAgain: "Cuba Lagi",
+      },
+    },
+
     validation: {
       emailRequired: "E-mel diperlukan.",
       emailInvalid: "Masukkan alamat e-mel yang sah.",

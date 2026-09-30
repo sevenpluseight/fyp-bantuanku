@@ -185,6 +185,63 @@ const en = {
       },
     },
 
+    profile: {
+      title: "Profile",
+      description: "Manage your personal and household information.",
+
+      sections: {
+        personal: "Personal",
+        householdFinancial: "Household & Financial",
+        contactResidence: "Contact & Residence",
+        preferences: "Preferences",
+        account: "Account",
+      },
+
+      personalInformation: {
+        title: "Personal Information",
+        description: "Personal and demographic information",
+      },
+
+      household: {
+        title: "My Household",
+        youOnly: "You only",
+        oneMember: "You + 1 household member",
+        multipleMembers: "You + {{count}} household members",
+      },
+
+      incomeEmployment: {
+        title: "Income & Employment",
+        noInformation: "Employment information",
+
+        status: {
+          employed: "Employed",
+          selfEmployed: "Self-employed",
+          unemployed: "Unemployed",
+          retired: "Retired",
+          notWorking: "Not working",
+        },
+      },
+
+      residentialAddress: {
+        title: "Residential Address",
+        noAddress: "No address provided",
+      },
+
+      language: {
+        title: "Language",
+      },
+
+      account: {
+        signOut: "Sign Out",
+      },
+
+      errors: {
+        loadTitle: "Unable to load profile",
+        loadDescription: "We couldn't load your profile information.",
+        tryAgain: "Try Again",
+      },
+    },
+
     validation: {
       emailRequired: "Email is required.",
       emailInvalid: "Enter a valid email address.",
