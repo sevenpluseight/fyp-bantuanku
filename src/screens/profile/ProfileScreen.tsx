@@ -168,7 +168,7 @@ export default function ProfileScreen() {
       return t("profile.incomeEmployment.noInformation");
     }
 
-    return t(`profile.incomeEmployment.${statusKey}`);
+    return t(`profile.incomeEmployment.status.${statusKey}`);
   }
 
   const getLanguageLabel = () => {
@@ -210,7 +210,10 @@ export default function ProfileScreen() {
   if (error || !profile) {
     return (
         <Screen>
-          <ScreenHeader title="Profile" description="Manage your personal and household information." />
+          <ScreenHeader
+              title={t("profile.title")}
+              description={t("profile.description")}
+          />
 
           <View className="mt-8">
             <Text className="text-base font-medium text-foreground">
@@ -238,7 +241,10 @@ export default function ProfileScreen() {
 
   return (
       <Screen>
-        <ScreenHeader title="Profile" description="Manage your personal and household information." />
+        <ScreenHeader
+            title={t("profile.title")}
+            description={t("profile.description")}
+        />
 
         <View className="mt-6 items-center">
           <View className="h-20 w-20 items-center justify-center rounded-full bg-primary/20">
