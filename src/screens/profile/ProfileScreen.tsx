@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getProfileOverview, ProfileOverview } from "../../services/profileService";
+import { getProfileOverview, ProfileOverview } from "../../services/profile/profileService";
 import { supabase } from "../../lib/supabase";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { BriefcaseBusiness, ChevronRight, Globe2, House, UserRound, UsersRound } from "lucide-react-native";
@@ -10,6 +10,8 @@ import ScreenHeader from "../../components/layout/ScreenHeader";
 import Button from "../../components/ui/Button";
 import Section from "../../components/layout/Section";
 import Card from "../../components/ui/Card";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {ProfileStackParamList} from "../../navigation/types";
 
 type ProfileRowProps = {
   icon: typeof UserRound;
@@ -18,6 +20,8 @@ type ProfileRowProps = {
   onPress?: () => void;
   showDivider?: boolean;
 };
+
+type ProfileScreenProps = NativeStackScreenProps<ProfileStackParamList, "ProfileOverview">;
 
 function ProfileRow({
     icon: Icon,
@@ -48,7 +52,9 @@ function ProfileRow({
             </Text>
           </View>
 
-          <ChevronRight size={20} color="#9CA3AF" />
+          {onPress && (
+              <ChevronRight size={20} color="#9CA3AF" />
+          )}
         </Pressable>
 
         {showDivider && (
@@ -89,7 +95,9 @@ const getInitials = (
   ).toUpperCase();
 };
 
-export default function ProfileScreen() {
+export default function ProfileScreen({
+    navigation
+}: ProfileScreenProps) {
   const { t } = useTranslation();
 
   const [profile, setProfile] = useState<ProfileOverview | null>(null);
@@ -272,6 +280,7 @@ export default function ProfileScreen() {
                 icon={UserRound}
                 title={t("profile.personalInformation.title")}
                 description={t("profile.personalInformation.description")}
+                onPress={() => navigation.navigate("PersonalInformation")}
             />
           </Card>
         </Section>
