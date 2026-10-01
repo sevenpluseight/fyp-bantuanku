@@ -1,5 +1,5 @@
-import {SupportedLanguage} from "../i18n/types";
-import {supabase} from "../lib/supabase";
+import { SupportedLanguage } from "../../i18n/types";
+import { supabase } from "../../lib/supabase";
 
 export type ProfileOverview = {
   id: string;
@@ -71,7 +71,7 @@ export const getProfileOverview = async (): Promise<ProfileOverview> => {
           .maybeSingle(),
 
       supabase
-          .from("household_members",)
+          .from("household_members")
           .select(
               "*",
               {
