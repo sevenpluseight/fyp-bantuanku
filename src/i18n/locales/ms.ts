@@ -9,6 +9,10 @@ const ms = {
       ok: "OK",
       remove: "Buang",
       complete: "Selesai",
+      edit: "Edit",
+      save: "Simpan", // TBC
+      discard: "Buang",
+      keepEditing: "Teruskan mengedit",
 
       selectDate: "Pilih tarikh",
       selectOption: "Pilih pilihan",
@@ -218,6 +222,12 @@ const ms = {
         nonMalaysian: "Bukan Warganegara Malaysia",
 
         notProvided: "Tidak diberikan",
+        updateFailed: "Nombor telefon anda tidak dapat dikemaskini. Sila cuba lagi.",
+
+        discardChanges: {
+          title: "Buang perubahan?",
+          message: "Perubahan anda tidak akan disimpan.",
+        },
       },
 
       household: {
