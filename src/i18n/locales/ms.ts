@@ -95,7 +95,7 @@ const ms = {
           subtitle: "Beritahu kami tempat tinggal semasa penerima bantuan",
 
           addressLine1: "Alamat Baris 1",
-          addressLine1Placeholder: "Nombor rumah/unit and jalan",
+          addressLine1Placeholder: "Nombor rumah/unit dan jalan",
 
           addressLine2: "Alamat Baris 2",
           addressLine2Placeholder: "Bangunan, apartmen atau kawasan perumahan",
@@ -200,6 +200,24 @@ const ms = {
       personalInformation: {
         title: "Maklumat Peribadi",
         description: "Maklumat peribadi dan demografi",
+
+        personalDetails: "Butiran Peribadi",
+        contact: "Maklumat Hubungan",
+
+        fullName: "Nama Penuh",
+        identificationNumber: "Nombor Kad Pengenalan",
+        dateOfBirth: "Tarikh Lahir",
+        gender: "Jantina",
+        citizenship: "Kewarganegaraan",
+        mobileNumber: "Nombor Telefon Bimbit",
+
+        male: "Lelaki",
+        female: "Perempuan",
+
+        malaysian: "Warganegara Malaysia",
+        nonMalaysian: "Bukan Warganegara Malaysia",
+
+        notProvided: "Tidak diberikan",
       },
 
       household: {

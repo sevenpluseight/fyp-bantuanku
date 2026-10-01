@@ -199,6 +199,24 @@ const zh = {
       personalInformation: {
         title: "个人资料",
         description: "个人及人口资料",
+
+        personalDetails: "个人资料",
+        contact: "联系方式",
+
+        fullName: "姓名",
+        identificationNumber: "身份证号码",
+        dateOfBirth: "出生日期",
+        gender: "性别",
+        citizenship: "国籍",
+        mobileNumber: "手机号码",
+
+        male: "男",
+        female: "女",
+
+        malaysian: "马来西亚公民",
+        nonMalaysian: "非马来西亚公民",
+
+        notProvided: "未提供",
       },
 
       household: {

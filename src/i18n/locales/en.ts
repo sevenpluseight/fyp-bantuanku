@@ -200,6 +200,24 @@ const en = {
       personalInformation: {
         title: "Personal Information",
         description: "Personal and demographic information",
+
+        personalDetails: "Personal Details",
+        contact: "Contact",
+
+        fullName: "Full Name",
+        identificationNumber: "IC Number",
+        dateOfBirth: "Date of Birth",
+        gender: "Gender",
+        citizenship: "Citizenship",
+        mobileNumber: "Mobile Number",
+
+        male: "Male",
+        female: "Female",
+
+        malaysian: "Malaysian",
+        nonMalaysian: "Non-Malaysian",
+
+        notProvided: "Not provided",
       },
 
       household: {
