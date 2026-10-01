@@ -9,6 +9,10 @@ const zh = {
       ok: "确定",
       remove: "移除",
       complete: "完成",
+      edit: "编辑",
+      save: "保存",
+      discard: "放弃",
+      keepEditing: "继续编辑",
 
       selectDate: "选择日期",
       selectOption: "请选择",
@@ -217,6 +221,12 @@ const zh = {
         nonMalaysian: "非马来西亚公民",
 
         notProvided: "未提供",
+        updateFailed: "无法更新您的手机号码，请重试。",
+
+        discardChanges: {
+          title: "放弃更改？",
+          message: "您所做的更改将不会被保存。",
+        },
       },
 
       household: {
