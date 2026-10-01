@@ -1,16 +1,19 @@
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {ProfileStackParamList} from "../../navigation/types";
-import {ActivityIndicator, Text, View} from "react-native";
-import {useTranslation} from "react-i18next";
-import {useCallback, useEffect, useState} from "react";
-import {getPersonalInformation, PersonalInformation} from "../../services/profile/personalInfoService";
-import {Mars, Venus} from "lucide-react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ProfileStackParamList } from "../../navigation/types";
+import { ActivityIndicator, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { useCallback, useEffect, useState } from "react";
+import { getPersonalInformation, PersonalInformation, updateMobileNumber } from "../../services/profile/personalInfoService";
+import { Mars, Venus } from "lucide-react-native";
+import { mobileNumberSchema } from "../../schemas/auth";
 
 import Screen from "../../components/layout/Screen";
 import ScreenHeader from "../../components/layout/ScreenHeader";
 import Button from "../../components/ui/Button";
 import Section from "../../components/layout/Section";
 import Card from "../../components/ui/Card";
+import Input from "../../components/ui/Input";
+import AlertDialog from "../../components/ui/AlertDialog";
 
 type PersonalInfoScreensProps = NativeStackScreenProps<ProfileStackParamList, "PersonalInformation">;
 
@@ -52,6 +55,12 @@ export default function PersonalInfoScreen({
   const [personalInformation, setPersonalInformation] = useState<PersonalInformation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [editingMobile, setEditingMobile] = useState(false);
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [mobileError, setMobileError] = useState("");
+  const [savingMobile, setSavingMobile] = useState(false);
+  const [originalMobileNumber, setOriginalMobileNumber] = useState("");
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   const loadPersonalInformation =
       useCallback(async () => {
@@ -139,6 +148,104 @@ export default function PersonalInfoScreen({
             "profile.personalInformation.nonMalaysian"
         );
   };
+
+  const hasMobileChanged =
+      mobileNumber.replace(/\D/g, "") !==
+      originalMobileNumber.replace(/\D/g, "");
+
+  const handleEditMobile = () => {
+    const currentMobileNumber =
+        personalInformation?.mobilePhone
+            ? formatMobileNumber(personalInformation.mobilePhone)
+            : "";
+
+    setOriginalMobileNumber(currentMobileNumber);
+    setMobileNumber(currentMobileNumber);
+    setMobileError("");
+    setEditingMobile(true);
+  };
+
+  const handleMobileChange = (
+      value: string
+  ) => {
+    setMobileNumber(value);
+
+    if (mobileError) {
+      setMobileError("");
+    }
+  };
+
+  const handleCancelMobile = () => {
+    if (hasMobileChanged) {
+      setShowCancelDialog(true);
+
+      return;
+    }
+
+    setEditingMobile(false);
+    setMobileNumber("");
+    setOriginalMobileNumber("");
+    setMobileError("");
+  };
+
+  const handleDiscardMobile = () => {
+    setShowCancelDialog(false);
+    setEditingMobile(false);
+    setMobileNumber("");
+    setOriginalMobileNumber("");
+    setMobileError("");
+  };
+
+  const handleSaveMobile =
+      async () => {
+        const result =
+            mobileNumberSchema(t).safeParse(
+                mobileNumber
+            );
+
+        if (!result.success) {
+          setMobileError(
+              result.error.issues[0]?.message ??
+              t("validation.mobileNumberInvalid")
+          );
+
+          return;
+        }
+
+        try {
+          setSavingMobile(true);
+          setMobileError("");
+
+          await updateMobileNumber(
+              result.data
+          );
+
+          const updatedInformation =
+              await getPersonalInformation();
+
+          setPersonalInformation(
+              updatedInformation
+          );
+
+          setEditingMobile(false);
+          setMobileNumber("");
+          setOriginalMobileNumber("");
+        } catch (saveError) {
+          if (__DEV__) {
+            console.error(
+                "[PROFILE] Failed to update mobile number:", saveError
+            );
+          }
+
+          setMobileError(
+              t(
+                  "profile.personalInformation.updateFailed"
+              )
+          );
+        } finally {
+          setSavingMobile(false);
+        }
+      };
 
   if (loading) {
     return (
@@ -244,14 +351,74 @@ export default function PersonalInfoScreen({
 
           <Section title={t("profile.personalInformation.contact")}>
             <Card>
-              <InformationRow
-                  label={t("profile.personalInformation.mobileNumber")}
-                  value={formatMobileNumber(personalInformation.mobilePhone)}
-                  showDivider={false}
-              />
+              {editingMobile ? (
+                  <View className="gap-4">
+                    <Input
+                        label={t("profile.personalInformation.mobileNumber")}
+                        value={mobileNumber}
+                        onChangeText={handleMobileChange}
+                        keyboardType="phone-pad"
+                        autoComplete="tel"
+                        placeholder="012-3456789"
+                        error={mobileError || undefined}
+                        editable={!savingMobile}
+                    />
+
+                    <View className="flex-row justify-end gap-3">
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={savingMobile}
+                          onPress={handleCancelMobile}
+                      >
+                        {t("common.cancel")}
+                      </Button>
+
+                      <Button
+                          size="sm"
+                          loading={savingMobile}
+                          disabled={!hasMobileChanged}
+                          onPress={() => void handleSaveMobile()}
+                      >
+                        {t("common.save")}
+                      </Button>
+                    </View>
+                  </View>
+              ) : (
+                  <View>
+                    <InformationRow
+                        label={t("profile.personalInformation.mobileNumber")}
+                        value={formatMobileNumber(personalInformation.mobilePhone)}
+                        showDivider={false}
+                    />
+
+                    <View className="items-end">
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onPress={handleEditMobile}
+                      >
+                        {t("common.edit")}
+                      </Button>
+                    </View>
+                  </View>
+              )}
             </Card>
           </Section>
         </View>
+
+        <AlertDialog
+            visible={showCancelDialog}
+            variant="warning"
+            confirmVariant="destructive"
+            title={t("profile.personalInformation.discardChanges.title")}
+            message={t("profile.personalInformation.discardChanges.message")}
+            confirmText={t("common.discard")}
+            cancelText={t("common.keepEditing")}
+            onConfirm={handleDiscardMobile}
+            onCancel={() => setShowCancelDialog(false)}
+            onDismiss={() => setShowCancelDialog(false)}
+        />
       </Screen>
   );
 }
