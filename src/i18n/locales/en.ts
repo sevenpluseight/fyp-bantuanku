@@ -9,6 +9,10 @@ const en = {
       ok: "OK",
       remove: "Remove",
       complete: "Complete",
+      edit: "Edit",
+      save: "Save",
+      discard: "Discard",
+      keepEditing: "Keep Editing",
 
       selectDate: "Select a date",
       selectOption: "Select an option",
@@ -218,6 +222,12 @@ const en = {
         nonMalaysian: "Non-Malaysian",
 
         notProvided: "Not provided",
+        updateFailed: "Unable to update your mobile number. Please try again.",
+
+        discardChanges: {
+          title: "Discard changes?",
+          message: "Your changes will not be saved.",
+        },
       },
 
       household: {
