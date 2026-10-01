@@ -1,13 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import type { MainTabParamList } from "./types";
 import { FileText, Home, Search, UserRound } from "lucide-react-native";
+import { Platform } from "react-native";
 
 import HomeScreen from "../screens/home/HomeScreen"
 import ProgramsScreen from "../screens/programs/ProgramsScreen";
 import ApplicationsScreen from "../screens/applications/ApplicationsScreen";
-import ProfileScreen from "../screens/profile/ProfileScreen";
 import AnimatedTabIcon from "./AnimatedTabIcon";
-import { Platform } from "react-native";
+import ProfileStackNavigator from "./ProfileStackNavigator";
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -88,9 +88,10 @@ export default function MainTabNavigator() {
         {/* Profile */}
         <Tab.Screen
           name="Profile"
-          component={ProfileScreen}
+          component={ProfileStackNavigator}
           options={{
             title: "Profile",
+            popToTopOnBlur: true,
             tabBarIcon: ({ color, size, focused }) => (
                 <AnimatedTabIcon
                     icon={UserRound}
