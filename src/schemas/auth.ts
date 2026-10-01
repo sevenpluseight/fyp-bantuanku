@@ -48,6 +48,21 @@ export const registerSchema = (t: TFunction) => z.object({
         }
     );
 
+export const mobileNumberSchema = (t: TFunction) => z
+    .string()
+    .trim()
+    .min(1, t("validation.mobileNumberRequired"))
+    .refine(
+        (value) => {
+          const digits = value.replace(/\D/g, "");
+
+          return /^01\d{8,9}$/.test(digits);
+        },
+        {
+          message: t("validation.mobileNumberInvalid"),
+        }
+    );
+
 export type RegisterFormData = z.infer<ReturnType<typeof registerSchema>>;
 
 export const registerPersonalSchema = (t: TFunction) => z.object({
