@@ -53,3 +53,33 @@ export const getPersonalInformation =
     mobilePhone: data.mobile_phone
   };
 };
+
+
+export const updateMobileNumber =
+    async (
+        mobilePhone: string
+    ): Promise<void> => {
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        throw userError;
+      }
+
+      if (!user) {
+        throw new Error("No authenticated user.");
+      }
+
+      const normalizedMobilePhone = mobilePhone.replace(/\D/g, "");
+
+      const { error } = await supabase
+          .from("profiles")
+          .update({mobile_phone: normalizedMobilePhone})
+          .eq("user_id", user.id);
+
+      if (error) {
+        throw error;
+      }
+    };
