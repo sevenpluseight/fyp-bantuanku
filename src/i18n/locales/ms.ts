@@ -53,6 +53,7 @@ const ms = {
           personal: "Peribadi",
           residence: "Alamat",
           household: "Isi Rumah",
+          documents: "Dokumen",
         },
 
         account: {
@@ -177,6 +178,45 @@ const ms = {
             title: "Buang ahli isi rumah?",
             message: "Maklumat yang dimasukkan untuk ahli isi rumah ini akan dibuang.",
           }
+        },
+
+        documents: {
+          title: "Dokumen Sokongan",
+          subTitle: "Muat naik dokumen yang anda sudah miliki untuk memudahkan permohonan bantuan pada masa akan datang.",
+          optional: "Dokumen adalah pilihan. Anda boleh menambah atau mengemas kini dokumen kemudian melalui profil anda.",
+
+          identity: {
+            title: "Dokumen Pengenalan",
+            description: "MyKad, MyPR atau dokumen pengenalan lain",
+          },
+
+          income: {
+            title: "Dokumen Pendapatan",
+            description: "Slip gaji, penyata pendapatan majikan atau pengisytiharan pendapatan",
+          },
+
+          address: {
+            title: "Bukti Alamat",
+            description: "Bil utiliti yang memaparkan alamat kediaman anda",
+          },
+
+          bank: {
+            title: "Bukti Akaun Bank",
+            description: "Penyata bank atau pengesahan akaun bank",
+          },
+
+          upload: "Muat Naik",
+          addAnother: "Tambah lagi",
+          replace: "Ganti",
+
+          fileRequirements: "PDF, JPG atau PNG • Maksimum 10 MB bagi setiap fail",
+
+          error: {
+            title: "Ralat Dokumen",
+            invalidFileType: "Sila pilih fail PDF, JPG atau PNG.",
+            fileTooLarge: "Fail yang dipilih mestilah bersaiz 10 MB atau kurang.",
+            selectionFailed: "Dokumen ini tidak dapat dipilih. Sila cuba lagi.",
+          },
         },
 
         errors: {

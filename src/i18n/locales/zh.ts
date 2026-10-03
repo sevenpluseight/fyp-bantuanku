@@ -53,6 +53,7 @@ const zh = {
           personal: "个人",
           residence: "住址",
           household: "家庭",
+          documents: "文件",
         },
 
         account: {
@@ -176,6 +177,45 @@ const zh = {
             title: "移除家庭成员？",
             message: "为此家庭成员填写的资料将会被移除。",
           }
+        },
+
+        documents: {
+          title: "辅助文件",
+          subTitle: "上传您已有的文件，让日后的援助申请更加方便。",
+          optional: "文件为选填项目。您可以稍后在个人资料中添加或更新文件。",
+
+          identity: {
+            title: "身份证明文件",
+            description: "MyKad、MyPR 或其他身份证明文件",
+          },
+
+          income: {
+            title: "收入证明文件",
+            description: "工资单、雇主收入证明或收入声明",
+          },
+
+          address: {
+            title: "地址证明",
+            description: "显示您居住地址的水电费账单",
+          },
+
+          bank: {
+            title: "银行账户证明",
+            description: "银行结单或银行账户证明",
+          },
+
+          upload: "上传",
+          addAnother: "继续添加",
+          remove: "移除",
+
+          fileRequirements: "PDF、JPG 或 PNG • 每个文件最大 10 MB",
+
+          error: {
+            title: "文件错误",
+            invalidFileType: "请选择 PDF、JPG 或 PNG 文件。",
+            fileTooLarge: "所选文件大小不得超过 10 MB。",
+            selectionFailed: "无法选择此文件，请重试。",
+          },
         },
 
         errors: {

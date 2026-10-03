@@ -53,6 +53,7 @@ const en = {
           personal: "Personal",
           residence: "Residence",
           household: "Household",
+          documents: "Documents",
         },
 
         account: {
@@ -177,6 +178,43 @@ const en = {
             title: "Remove household member?",
             message: "The information entered for this household member will be removed.",
           }
+        },
+        documents: {
+          title: "Supporting Documents",
+          subTitle: "Upload documents you already have to make future aid applications easier.",
+
+          optional: "Documents are optional. You can add or update them later from your profile.",
+          identity: {
+            title: "Identification Document",
+            description: "MyKad, MyPR or other identification document",
+          },
+
+          income: {
+            title: "Income Document",
+            description: "Payslip, employer income statement or income declaration",
+          },
+
+          address: {
+            title: "Proof of Address",
+            description: "Utility bill showing your residential address",
+          },
+
+          bank: {
+            title: "Bank Account Proof",
+            description: "Bank statement or bank account verification",
+          },
+
+          upload: "Upload",
+          addAnother: "Add another",
+          replace: "Replace",
+          fileRequirements: "PDF, JPG or PNG • Maximum 10 MB per file",
+
+          error: {
+            title: "Document Error",
+            invalidFileType: "Please select a PDF, JPG or PNG file.",
+            fileTooLarge: "The selected file must be 10 MB or smaller.",
+            selectionFailed: "Unable to select this document. Please try again.",
+          },
         },
 
         errors: {
