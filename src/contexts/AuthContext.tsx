@@ -1,5 +1,5 @@
 import { Session, User } from "@supabase/supabase-js";
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { supabase } from "../lib/supabase";
 
 /**
@@ -9,17 +9,23 @@ import { supabase } from "../lib/supabase";
  * after sign-up before the registration RPC has finished creating the user's profile, so registrationComplete may
  * temporarily remain false.
  *
- * After the registration RPC succeeds, RegisterScreen explicitly calls refreshRegistrationStatus().
- * This checks the current Supabase session again and re-checks the profile which allows RootNavigator
- * to switch from the auth flow to MainTabNavigator.
+ * RegisterScreen marks registration as in progress while the account, profile and optional documents are being
+ * created. While registration is in progress, profile checks do not switch registrationComplete to true.
+ *
+ * After registration and optional document uploads finish, RegisterScreen clears the registration-in-progress state
+ * and explicitly calls refreshRegistrationStatus(). This checks the current Supabase session again and re-checks
+ * the profile which allows RootNavigator to switch from the auth flow to MainTabNavigator.
  *
  * Profile status checks may occasionally receive a transient PostgREST PGRST303 "JWT issued at future" response.
  * In that case, the session is refreshed and the profile check is retried once. A failed profile check
  * does not automatically mean that registration is incomplete.
  *
  * [Summary]
+ * Registration starts -> registrationInProgress = true
  * Auth session created -> onAuthStateChange -> profile may not exist yet
- * Registration RPC succeeds -> refreshRegistrationStatus -> profile exists
+ * Registration RPC succeeds -> optional documents are uploaded
+ * Registration finishes -> registrationInProgress = false
+ * refreshRegistrationStatus -> profile exists -> MainTabNavigator
  */
 
 type AuthContextValue = {
@@ -27,12 +33,12 @@ type AuthContextValue = {
   user: User | null;
   loading: boolean;
   registrationComplete: boolean;
+  registrationInProgress: boolean;
+  setRegistrationInProgress: (inProgress: boolean) => void;
   refreshRegistrationStatus: () => Promise<void>;
 };
 
-const AuthContext = createContext<AuthContextValue | undefined>(
-    undefined
-);
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -44,6 +50,16 @@ export default function AuthProvider({
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [registrationComplete, setRegistrationComplete] = useState(false);
+  const [registrationInProgress, setRegistrationInProgressState] = useState(false);
+
+  const registrationInProgressRef = useRef(false);
+
+  const setRegistrationInProgress = (
+      inProgress: boolean
+  ) => {
+    registrationInProgressRef.current = inProgress;
+    setRegistrationInProgressState(inProgress);
+  };
 
   const checkRegistrationStatus = async (
       currentSession: Session | null,
@@ -108,6 +124,10 @@ export default function AuthProvider({
         );
       }
 
+      return;
+    }
+
+    if (registrationInProgressRef.current) {
       return;
     }
 
@@ -194,6 +214,8 @@ export default function AuthProvider({
     user: session?.user ?? null,
     loading,
     registrationComplete,
+    registrationInProgress,
+    setRegistrationInProgress,
     refreshRegistrationStatus
   };
 
