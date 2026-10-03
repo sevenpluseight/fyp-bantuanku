@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import type { MainTabParamList } from "./types";
+import type { MainTabParamList } from "../types/tabNavigator";
 import { FileText, Home, Search, UserRound } from "lucide-react-native";
 import { Platform } from "react-native";
 
