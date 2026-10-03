@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "../../lib/supabase";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../../navigation/types";
+import { AuthStackParamList } from "../../types/tabNavigator";
 import { useTranslation } from "react-i18next";
 
 import Screen from "../../components/layout/Screen";

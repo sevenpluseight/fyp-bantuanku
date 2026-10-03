@@ -9,6 +9,10 @@ const zh = {
       ok: "确定",
       remove: "移除",
       complete: "完成",
+      edit: "编辑",
+      save: "保存",
+      discard: "放弃",
+      keepEditing: "继续编辑",
 
       selectDate: "选择日期",
       selectOption: "请选择",
@@ -49,6 +53,7 @@ const zh = {
           personal: "个人",
           residence: "住址",
           household: "家庭",
+          documents: "文件",
         },
 
         account: {
@@ -174,6 +179,45 @@ const zh = {
           }
         },
 
+        documents: {
+          title: "辅助文件",
+          subTitle: "上传您已有的文件，让日后的援助申请更加方便。",
+          optional: "文件为选填项目。您可以稍后在个人资料中添加或更新文件。",
+
+          identity: {
+            title: "身份证明文件",
+            description: "MyKad、MyPR 或其他身份证明文件",
+          },
+
+          income: {
+            title: "收入证明文件",
+            description: "工资单、雇主收入证明或收入声明",
+          },
+
+          address: {
+            title: "地址证明",
+            description: "显示您居住地址的水电费账单",
+          },
+
+          bank: {
+            title: "银行账户证明",
+            description: "银行结单或银行账户证明",
+          },
+
+          upload: "上传",
+          addAnother: "继续添加",
+          remove: "移除",
+
+          fileRequirements: "PDF、JPG 或 PNG • 每个文件最大 10 MB",
+
+          error: {
+            title: "文件错误",
+            invalidFileType: "请选择 PDF、JPG 或 PNG 文件。",
+            fileTooLarge: "所选文件大小不得超过 10 MB。",
+            selectionFailed: "无法选择此文件，请重试。",
+          },
+        },
+
         errors: {
           title: "无法完成注册。",
           incompleteRegistration: "部分注册资料尚未填写完整，请检查之前的步骤。",
@@ -181,6 +225,87 @@ const zh = {
           registrationFailed: "无法完成注册，请重试。",
           identificationNumberExists: "此身份证号码已被注册。"
         },
+      },
+    },
+
+    profile: {
+      title: "个人资料",
+      description: "管理您的个人及家庭资料。",
+
+      sections: {
+        personal: "个人",
+        householdFinancial: "家庭与财务",
+        contactResidence: "联系与住址",
+        preferences: "偏好设置",
+        account: "账户",
+      },
+
+      personalInformation: {
+        title: "个人资料",
+        description: "个人及人口资料",
+
+        personalDetails: "个人资料",
+        contact: "联系方式",
+
+        fullName: "姓名",
+        identificationNumber: "身份证号码",
+        dateOfBirth: "出生日期",
+        gender: "性别",
+        citizenship: "国籍",
+        mobileNumber: "手机号码",
+
+        male: "男",
+        female: "女",
+
+        malaysian: "马来西亚公民",
+        nonMalaysian: "非马来西亚公民",
+
+        notProvided: "未提供",
+        updateFailed: "无法更新您的手机号码，请重试。",
+
+        discardChanges: {
+          title: "放弃更改？",
+          message: "您所做的更改将不会被保存。",
+        },
+      },
+
+      household: {
+        title: "我的家庭",
+        youOnly: "仅您一人",
+        oneMember: "您 + 1 位家庭成员",
+        multipleMembers: "您 + {{count}} 位家庭成员",
+      },
+
+      incomeEmployment: {
+        title: "收入与就业",
+        noInformation: "就业资料",
+
+        status: {
+          employed: "受雇",
+          selfEmployed: "自雇",
+          unemployed: "失业",
+          retired: "退休",
+          notWorking: "没有工作",
+        },
+      },
+
+      residentialAddress: {
+        title: "居住地址",
+        noAddress: "尚未提供地址",
+      },
+
+      language: {
+        title: "语言",
+      },
+
+      account: {
+        signOut: "退出登录",
+      },
+
+      errors: {
+        loadTitle: "无法加载个人资料",
+        loadDescription: "无法加载您的个人资料。",
+        tryAgain: "重试",
       },
     },
 

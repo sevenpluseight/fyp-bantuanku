@@ -18,6 +18,7 @@ export default function RegistrationProgress({
     t("auth.register.progress.personal"),
     t("auth.register.progress.residence"),
     t("auth.register.progress.household"),
+    t("auth.register.progress.documents"),
   ];
 
   return (

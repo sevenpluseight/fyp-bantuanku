@@ -9,6 +9,10 @@ const en = {
       ok: "OK",
       remove: "Remove",
       complete: "Complete",
+      edit: "Edit",
+      save: "Save",
+      discard: "Discard",
+      keepEditing: "Keep Editing",
 
       selectDate: "Select a date",
       selectOption: "Select an option",
@@ -49,6 +53,7 @@ const en = {
           personal: "Personal",
           residence: "Residence",
           household: "Household",
+          documents: "Documents",
         },
 
         account: {
@@ -174,6 +179,43 @@ const en = {
             message: "The information entered for this household member will be removed.",
           }
         },
+        documents: {
+          title: "Supporting Documents",
+          subTitle: "Upload documents you already have to make future aid applications easier.",
+
+          optional: "Documents are optional. You can add or update them later from your profile.",
+          identity: {
+            title: "Identification Document",
+            description: "MyKad, MyPR or other identification document",
+          },
+
+          income: {
+            title: "Income Document",
+            description: "Payslip, employer income statement or income declaration",
+          },
+
+          address: {
+            title: "Proof of Address",
+            description: "Utility bill showing your residential address",
+          },
+
+          bank: {
+            title: "Bank Account Proof",
+            description: "Bank statement or bank account verification",
+          },
+
+          upload: "Upload",
+          addAnother: "Add another",
+          replace: "Replace",
+          fileRequirements: "PDF, JPG or PNG • Maximum 10 MB per file",
+
+          error: {
+            title: "Document Error",
+            invalidFileType: "Please select a PDF, JPG or PNG file.",
+            fileTooLarge: "The selected file must be 10 MB or smaller.",
+            selectionFailed: "Unable to select this document. Please try again.",
+          },
+        },
 
         errors: {
           title: "Unable to complete registration",
@@ -182,6 +224,87 @@ const en = {
           registrationFailed: "Registration could not be completed. Please try again.",
           identificationNumberExists: "This IC number is already registered."
         },
+      },
+    },
+
+    profile: {
+      title: "Profile",
+      description: "Manage your personal and household information.",
+
+      sections: {
+        personal: "Personal",
+        householdFinancial: "Household & Financial",
+        contactResidence: "Contact & Residence",
+        preferences: "Preferences",
+        account: "Account",
+      },
+
+      personalInformation: {
+        title: "Personal Information",
+        description: "Personal and demographic information",
+
+        personalDetails: "Personal Details",
+        contact: "Contact",
+
+        fullName: "Full Name",
+        identificationNumber: "IC Number",
+        dateOfBirth: "Date of Birth",
+        gender: "Gender",
+        citizenship: "Citizenship",
+        mobileNumber: "Mobile Number",
+
+        male: "Male",
+        female: "Female",
+
+        malaysian: "Malaysian",
+        nonMalaysian: "Non-Malaysian",
+
+        notProvided: "Not provided",
+        updateFailed: "Unable to update your mobile number. Please try again.",
+
+        discardChanges: {
+          title: "Discard changes?",
+          message: "Your changes will not be saved.",
+        },
+      },
+
+      household: {
+        title: "My Household",
+        youOnly: "You only",
+        oneMember: "You + 1 household member",
+        multipleMembers: "You + {{count}} household members",
+      },
+
+      incomeEmployment: {
+        title: "Income & Employment",
+        noInformation: "Employment information",
+
+        status: {
+          employed: "Employed",
+          selfEmployed: "Self-employed",
+          unemployed: "Unemployed",
+          retired: "Retired",
+          notWorking: "Not working",
+        },
+      },
+
+      residentialAddress: {
+        title: "Residential Address",
+        noAddress: "No address provided",
+      },
+
+      language: {
+        title: "Language",
+      },
+
+      account: {
+        signOut: "Sign Out",
+      },
+
+      errors: {
+        loadTitle: "Unable to load profile",
+        loadDescription: "We couldn't load your profile information.",
+        tryAgain: "Try Again",
       },
     },
 
