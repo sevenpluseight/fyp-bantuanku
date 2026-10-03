@@ -23,6 +23,7 @@ export const loginSchema = (t: TFunction) => z.object({
 export type LoginFormData = z.infer<ReturnType<typeof loginSchema>>;
 
 export const registerSchema = (t: TFunction) => z.object({
+  // TODO-1: Enhance validation - gmail, yahoo, icloud, hotmail, outlook
   email: z
       .string()
       .trim()
@@ -71,6 +72,7 @@ export const registerPersonalSchema = (t: TFunction) => z.object({
       .trim()
       .min(1, t("validation.fullNameRequired")),
 
+  // TODO-2: Only allow valid state code - https://www.jpn.gov.my/en/information/state-code/
   myKadNumber: z
       .string()
       .trim()
@@ -123,6 +125,7 @@ export const registerResidenceSchema = (t: TFunction) => z.object({
       .trim()
       .optional(),
 
+  // TODO-3: Only allow valid postcode - get from API: https://api-ninjas.com/postal-code/malaysia
   postcode: z
       .string()
       .trim()
@@ -192,6 +195,7 @@ export const registerHouseholdIncomeSchema = (t: TFunction) => {
             }
         ),
 
+    // TODO-4: Enhance incomeSource with the chosen employmentStatus
     incomeSource: z
         .union([
           z.literal(""),
@@ -204,6 +208,7 @@ export const registerHouseholdIncomeSchema = (t: TFunction) => {
             }
         ),
 
+    // TODO-5: Add validation - No zero income amount and maximum 7 digits (9,999,999)
     personalMonthlyIncome: z
         .string()
         .trim()
