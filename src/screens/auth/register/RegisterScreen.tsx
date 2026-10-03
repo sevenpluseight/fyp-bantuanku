@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../../../navigation/types";
+import { AuthStackParamList } from "../../../types/tabNavigator";
 import { useState } from "react";
 import {
   RegisterFormData,
@@ -9,9 +9,11 @@ import {
 } from "../../../schemas/auth";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
+import { SelectedDocument } from "../../../types/documents";
 import { useAuth } from "../../../contexts/AuthContext";
 import { getStoredLanguage } from "../../../i18n/language";
-import { RegistrationError, completeRegistration } from "../../../services/registrationService";
+import { completeRegistration, RegistrationError } from "../../../services/registrationService";
+import { uploadRegistrationDocuments } from "../../../services/documentService";
 
 import AuthBackground from "../../../components/auth/AuthBackground";
 import Screen from "../../../components/layout/Screen";
@@ -19,24 +21,25 @@ import RegisterAccountStep from "./RegisterAccountStep";
 import RegisterPersonalStep from "./RegisterPersonalStep";
 import RegisterResidenceStep from "./RegisterResidenceStep";
 import RegisterHouseholdIncomeStep from "./RegisterHouseholdIncomeStep";
+import RegisterDocumentsStep from "./RegisterDocumentsStep";
 import RegisterLoading from "../../../components/auth/RegisterLoading";
 import AlertDialog from "../../../components/ui/AlertDialog";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
 
 export default function RegisterScreen({
-    navigation
-}: Props) {
+                                         navigation
+                                       }: Props) {
   const { t } = useTranslation();
+  const { refreshRegistrationStatus, setRegistrationInProgress } = useAuth();
+
   const [step, setStep] = useState(1);
-
-  const { refreshRegistrationStatus } = useAuth();
-
   const [accountData, setAccountData,] = useState<RegisterFormData | undefined>();
   const [personalData, setPersonalData,] = useState<RegisterPersonalFormData | undefined>();
   const [residenceData, setResidenceData,] = useState<RegisterResidenceFormData | undefined>();
-  const [householdIncomeData, setHouseholdMemberIncomeData,] = useState<RegisterHouseholdIncomeFormData | undefined>();
+  const [householdIncomeData, setHouseholdIncomeData,] = useState<RegisterHouseholdIncomeFormData | undefined>();
   const [myKadError, setMyKadError] = useState<string | null>(null);
+  const [documents, setDocuments] = useState<SelectedDocument[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [registrationError, setRegistrationError] = useState<string | null>(null);
 
@@ -52,7 +55,6 @@ export default function RegisterScreen({
   ) => {
     setPersonalData(data);
     setMyKadError(null);
-    setRegistrationError(null);
     setStep(3);
   }
 
@@ -63,59 +65,88 @@ export default function RegisterScreen({
     setStep(4);
   }
 
-  const handleHouseholdIncomeComplete = async (
+  const handleHouseholdIncomeContinue = (
       data: RegisterHouseholdIncomeFormData
-  ) => {
-    setHouseholdMemberIncomeData(data);
+  )=> {
+    setHouseholdIncomeData(data);
+    setStep(5);
+  };
 
-    // TODO-1: Supabase registration + profile persistence
-    if (
-        !accountData ||
-        !personalData ||
-        !residenceData
-    ) {
-      setRegistrationError(
-          t("auth.register.errors.incompleteRegistration")
-      )
-
+  const handleDocumentComplete = async () => {
+    if (submitting) {
       return;
     }
 
-    const preferredLanguage = getStoredLanguage();
-
-    if (!preferredLanguage) {
-      setRegistrationError(
-          t("auth.register.errors.languageUnavailable")
-      );
+    if (
+        !accountData ||
+        !personalData ||
+        !residenceData ||
+        !householdIncomeData
+    ) {
+      setRegistrationError(t("auth.register.errors.incompleteRegistration"));
 
       return;
     }
 
     setSubmitting(true);
+    setRegistrationInProgress(true);
     setRegistrationError(null);
 
     try {
-      await completeRegistration({
-        account: accountData,
-        personal: personalData,
-        residence: residenceData,
-        householdIncome: data,
-        preferredLanguage,
-      });
+      const preferredLanguage = getStoredLanguage();
 
-      await refreshRegistrationStatus();
-    } catch (error) {
-      if (
-          error instanceof RegistrationError &&
-          error.code === "identificationNumberExists"
-      ) {
-        setMyKadError(t("auth.register.errors.identificationNumberExists"));
-        setStep(2);
+      if (!preferredLanguage) {
+        setRegistrationError(t("auth.register.errors.languageUnavailable"));
+        setRegistrationInProgress(false);
+
         return;
       }
 
+      const {
+        profileId
+      } = await completeRegistration({
+        account: accountData,
+        personal: personalData,
+        residence: residenceData,
+        householdIncome: householdIncomeData,
+        preferredLanguage
+      });
+
+      if (documents.length > 0) {
+        const {
+          failedDocuments
+        } = await uploadRegistrationDocuments(
+            profileId,
+            documents
+        );
+
+        if (failedDocuments.length > 0 && __DEV__) {
+          console.warn(
+              "[REGISTRATION] Registration completed but some documents failed to upload:", failedDocuments
+          );
+        }
+      }
+
+      setRegistrationInProgress(false);
+
+      await refreshRegistrationStatus();
+    } catch (error) {
+      setRegistrationInProgress(false);
+
+      if (error instanceof RegistrationError) {
+        if (error.code === "identificationNumberExists") {
+          setMyKadError(t("auth.register.errors.identificationNumberExists"));
+
+          setStep(error.step);
+
+          return;
+        }
+      }
+
       if (__DEV__) {
-        console.error("[REGISTRATION] Registration failed:", error);
+        console.error(
+            "[REGISTRATION] Registration failed:", error
+        );
       }
 
       setRegistrationError(t("auth.register.errors.registrationFailed"));
@@ -124,26 +155,14 @@ export default function RegisterScreen({
     }
   };
 
-  if (submitting) {
-    return (
-        <View className="flex-1 bg-background">
-          <AuthBackground />
-
-          <Screen transparent>
-            <RegisterLoading />
-          </Screen>
-        </View>
-    );
-  }
-
   return (
       <View className="flex-1 bg-background">
         <AuthBackground />
 
         <Screen transparent>
           <KeyboardAvoidingView
-            className="flex-1"
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+              className="flex-1"
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
             {step === 1 && (
                 <View className="flex-1 justify-center">
@@ -193,22 +212,37 @@ export default function RegisterScreen({
                   <RegisterHouseholdIncomeStep
                     defaultValues={householdIncomeData}
                     onBack={() => setStep(3)}
-                    onComplete={handleHouseholdIncomeComplete}
+                    onContinue={handleHouseholdIncomeContinue}
                   />
+                </View>
+            )}
 
-                  <AlertDialog
-                    visible={registrationError !== null}
-                    variant="error"
-                    title={t("auth.register.errors.title")}
-                    message={registrationError ?? undefined}
-                    confirmText={t("common.ok")}
-                    onConfirm={() => setRegistrationError(null)}
-                    onDismiss={() => setRegistrationError(null)}
-                  />
+            {step === 5 && (
+                <View className="flex-1 justify-center">
+                  {submitting ? (
+                      <RegisterLoading />
+                  ) : (
+                      <RegisterDocumentsStep
+                          documents={documents}
+                          onChange={setDocuments}
+                          onBack={() => setStep(4)}
+                          onComplete={handleDocumentComplete}
+                      />
+                  )}
                 </View>
             )}
           </KeyboardAvoidingView>
         </Screen>
+
+        <AlertDialog
+            visible={registrationError !== null}
+            variant="error"
+            title={t("auth.register.errors.title")}
+            message={registrationError ?? undefined}
+            confirmText={t("common.ok")}
+            onConfirm={() => setRegistrationError(null)}
+            onDismiss={() => setRegistrationError(null)}
+        />
       </View>
   );
 }
