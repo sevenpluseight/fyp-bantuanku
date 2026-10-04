@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ProfileStackParamList } from "../../navigation/types";
+import { ProfileStackParamList } from "../../types/tabNavigator";
 import { ActivityIndicator, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect, useState } from "react";

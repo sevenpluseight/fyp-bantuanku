@@ -4,14 +4,14 @@ import { supabase } from "../../lib/supabase";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { BriefcaseBusiness, ChevronRight, Globe2, House, UserRound, UsersRound } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ProfileStackParamList } from "../../types/tabNavigator";
 
 import Screen from "../../components/layout/Screen";
 import ScreenHeader from "../../components/layout/ScreenHeader";
 import Button from "../../components/ui/Button";
 import Section from "../../components/layout/Section";
 import Card from "../../components/ui/Card";
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {ProfileStackParamList} from "../../navigation/types";
 
 type ProfileRowProps = {
   icon: typeof UserRound;
