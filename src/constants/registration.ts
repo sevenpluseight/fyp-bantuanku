@@ -1,3 +1,5 @@
+import {RegistrationDocumentSection} from "../types/documents";
+
 export const CITIZENSHIP_VALUES = [
   "malaysian",
   "non_malaysian",
@@ -78,3 +80,31 @@ export const HOUSEHOLD_RELATIONSHIP_VALUES = [
 ] as const;
 
 export type HouseholdRelationshipValue = typeof HOUSEHOLD_RELATIONSHIP_VALUES[number];
+
+export const REGISTRATION_DOCUMENT_SECTIONS:
+    RegistrationDocumentSection[] = [
+  {
+    type: "identity_document",
+    titleKey: "auth.register.documents.identity.title",
+    descriptionKey: "auth.register.documents.identity.description",
+    multiple: false,
+  },
+  {
+    type: "income_proof",
+    titleKey: "auth.register.documents.income.title",
+    descriptionKey: "auth.register.documents.income.description",
+    multiple: true,
+  },
+  {
+    type: "utility_bill",
+    titleKey: "auth.register.documents.address.title",
+    descriptionKey: "auth.register.documents.address.description",
+    multiple: false,
+  },
+  {
+    type: "bank_account_proof",
+    titleKey: "auth.register.documents.bank.title",
+    descriptionKey: "auth.register.documents.bank.description",
+    multiple: false,
+  },
+];

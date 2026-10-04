@@ -9,6 +9,10 @@ const ms = {
       ok: "OK",
       remove: "Buang",
       complete: "Selesai",
+      edit: "Edit",
+      save: "Simpan", // TBC
+      discard: "Buang",
+      keepEditing: "Teruskan mengedit",
 
       selectDate: "Pilih tarikh",
       selectOption: "Pilih pilihan",
@@ -49,6 +53,7 @@ const ms = {
           personal: "Peribadi",
           residence: "Alamat",
           household: "Isi Rumah",
+          documents: "Dokumen",
         },
 
         account: {
@@ -95,7 +100,7 @@ const ms = {
           subtitle: "Beritahu kami tempat tinggal semasa penerima bantuan",
 
           addressLine1: "Alamat Baris 1",
-          addressLine1Placeholder: "Nombor rumah/unit and jalan",
+          addressLine1Placeholder: "Nombor rumah/unit dan jalan",
 
           addressLine2: "Alamat Baris 2",
           addressLine2Placeholder: "Bangunan, apartmen atau kawasan perumahan",
@@ -175,6 +180,45 @@ const ms = {
           }
         },
 
+        documents: {
+          title: "Dokumen Sokongan",
+          subTitle: "Muat naik dokumen yang anda sudah miliki untuk memudahkan permohonan bantuan pada masa akan datang.",
+          optional: "Dokumen adalah pilihan. Anda boleh menambah atau mengemas kini dokumen kemudian melalui profil anda.",
+
+          identity: {
+            title: "Dokumen Pengenalan",
+            description: "MyKad, MyPR atau dokumen pengenalan lain",
+          },
+
+          income: {
+            title: "Dokumen Pendapatan",
+            description: "Slip gaji, penyata pendapatan majikan atau pengisytiharan pendapatan",
+          },
+
+          address: {
+            title: "Bukti Alamat",
+            description: "Bil utiliti yang memaparkan alamat kediaman anda",
+          },
+
+          bank: {
+            title: "Bukti Akaun Bank",
+            description: "Penyata bank atau pengesahan akaun bank",
+          },
+
+          upload: "Muat Naik",
+          addAnother: "Tambah lagi",
+          replace: "Ganti",
+
+          fileRequirements: "PDF, JPG atau PNG • Maksimum 10 MB bagi setiap fail",
+
+          error: {
+            title: "Ralat Dokumen",
+            invalidFileType: "Sila pilih fail PDF, JPG atau PNG.",
+            fileTooLarge: "Fail yang dipilih mestilah bersaiz 10 MB atau kurang.",
+            selectionFailed: "Dokumen ini tidak dapat dipilih. Sila cuba lagi.",
+          },
+        },
+
         errors: {
           title: "Pendaftaran tidak dapat diselesaikan",
           incompleteRegistration: "Sesetengah maklumat pendaftaran tidak lengkap. Sila semak langkah sebelumnya.",
@@ -182,6 +226,87 @@ const ms = {
           registrationFailed: "Pendaftaran tidak dapat diselesaikan. Sila cuba lagi.",
           identificationNumberExists: "Nombor kad pengenalan ini telah didaftarkan."
         },
+      },
+    },
+
+    profile: {
+      title: "Profil",
+      description: "Urus maklumat peribadi dan isi rumah anda.",
+
+      sections: {
+        personal: "Peribadi",
+        householdFinancial: "Isi Rumah & Kewangan",
+        contactResidence: "Hubungan & Tempat Tinggal",
+        preferences: "Keutamaan",
+        account: "Akaun",
+      },
+
+      personalInformation: {
+        title: "Maklumat Peribadi",
+        description: "Maklumat peribadi dan demografi",
+
+        personalDetails: "Butiran Peribadi",
+        contact: "Maklumat Hubungan",
+
+        fullName: "Nama Penuh",
+        identificationNumber: "Nombor Kad Pengenalan",
+        dateOfBirth: "Tarikh Lahir",
+        gender: "Jantina",
+        citizenship: "Kewarganegaraan",
+        mobileNumber: "Nombor Telefon Bimbit",
+
+        male: "Lelaki",
+        female: "Perempuan",
+
+        malaysian: "Warganegara Malaysia",
+        nonMalaysian: "Bukan Warganegara Malaysia",
+
+        notProvided: "Tidak diberikan",
+        updateFailed: "Nombor telefon anda tidak dapat dikemaskini. Sila cuba lagi.",
+
+        discardChanges: {
+          title: "Buang perubahan?",
+          message: "Perubahan anda tidak akan disimpan.",
+        },
+      },
+
+      household: {
+        title: "Isi Rumah Saya",
+        youOnly: "Anda sahaja",
+        oneMember: "Anda + 1 ahli isi rumah",
+        multipleMembers: "Anda + {{count}} ahli isi rumah",
+      },
+
+      incomeEmployment: {
+        title: "Pendapatan & Pekerjaan",
+        noInformation: "Maklumat pekerjaan",
+
+        status: {
+          employed: "Bekerja",
+          selfEmployed: "Bekerja sendiri",
+          unemployed: "Menganggur",
+          retired: "Bersara",
+          notWorking: "Tidak bekerja",
+        },
+      },
+
+      residentialAddress: {
+        title: "Alamat Kediaman",
+        noAddress: "Tiada alamat diberikan",
+      },
+
+      language: {
+        title: "Bahasa",
+      },
+
+      account: {
+        signOut: "Log Keluar",
+      },
+
+      errors: {
+        loadTitle: "Tidak dapat memuatkan profil",
+        loadDescription: "Maklumat profil anda tidak dapat dimuatkan.",
+        tryAgain: "Cuba Lagi",
       },
     },
 

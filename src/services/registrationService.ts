@@ -7,6 +7,7 @@ import {
 import { supabase } from "../lib/supabase";
 import { STATE_TERRITORY_MAP, StateTerritoryValue } from "../constants/registration";
 import { SupportedLanguage } from "../i18n/types";
+import { getGenderFromMyKad } from "../lib/myKad";
 
 type CompleteRegistrationData = {
   account: RegisterFormData;
@@ -104,6 +105,11 @@ export const completeRegistration = async ({
 
   const email = account.email.trim().toLowerCase();
 
+  const gender =
+      personal.citizenship === "malaysian"
+          ? getGenderFromMyKad(personal.myKadNumber)
+          : null;
+
   // Check whether an authenticated session already exists
   // Allows registration to be retried if the Auth account was created successfully but profile creation
   // previously failed
@@ -192,6 +198,7 @@ export const completeRegistration = async ({
           p_full_name: personal.fullName.trim(),
           p_identification_no: normalizeIdentificationNumber(personal.myKadNumber),
           p_date_of_birth: formatDateForDatabase(personal.dateOfBirth),
+          p_gender: gender,
           p_citizenship: personal.citizenship,
           p_mobile_phone: normalizeMobileNumber(personal.mobileNumber),
           p_email: email,

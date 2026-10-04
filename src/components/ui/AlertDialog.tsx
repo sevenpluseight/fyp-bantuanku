@@ -93,7 +93,7 @@ export default function AlertDialog({
             onPress={handleDismiss}
             accessibilityRole="button"
             accessibilityLabel="Close dialog"
-            disabled={dismissible}
+            disabled={!canDismiss}
           />
             <View className="w-full max-w-md rounded-3xl bg-background p-6" accessibilityViewIsModal>
               {canDismiss && (

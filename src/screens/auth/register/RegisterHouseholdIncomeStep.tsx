@@ -5,6 +5,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pressable, Text, View } from "react-native";
 import {ChevronDown, ChevronUp, Plus, Trash2} from "lucide-react-native";
+import { EmploymentStatusValue, HouseholdRelationshipValue, IncomeSourceValue } from "../../../constants/registration";
 
 import Select from "../../../components/ui/Select";
 import Input from "../../../components/ui/Input";
@@ -12,19 +13,18 @@ import Card from "../../../components/ui/Card";
 import DateInput from "../../../components/ui/DatePicker";
 import Button from "../../../components/ui/Button";
 import RegistrationProgress from "../../../components/auth/RegistrationProgress";
-import {EmploymentStatusValue, HouseholdRelationshipValue, IncomeSourceValue} from "../../../constants/registration";
 import AlertDialog from "../../../components/ui/AlertDialog";
 
 type RegisterHouseholdIncomeStepProps = {
   defaultValues?: RegisterHouseholdIncomeFormData;
   onBack: () => void;
-  onComplete: (data: RegisterHouseholdIncomeFormData) => void;
+  onContinue: (data: RegisterHouseholdIncomeFormData) => void;
 };
 
 export default function RegisterHouseholdIncomeStep({
     defaultValues,
     onBack,
-    onComplete
+    onContinue
 }: RegisterHouseholdIncomeStepProps) {
   const {t, i18n} = useTranslation();
 
@@ -484,9 +484,9 @@ export default function RegisterHouseholdIncomeStep({
             <View className="flex-1">
               <Button
                 fullWidth
-                onPress={handleSubmit(onComplete)}
+                onPress={handleSubmit(onContinue)}
               >
-                {t("common.complete")}
+                {t("common.continue")}
               </Button>
             </View>
           </View>

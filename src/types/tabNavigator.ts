@@ -13,3 +13,8 @@ export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
 };
+
+export type ProfileStackParamList = {
+  ProfileOverview: undefined;
+  PersonalInformation: undefined;
+};
