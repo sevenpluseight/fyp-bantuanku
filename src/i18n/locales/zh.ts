@@ -26,6 +26,10 @@ const zh = {
     },
 
     auth: {
+      common: {
+        backToLogin: "返回登录",
+      },
+
       login: {
         title: "欢迎回来",
         subtitle: "登录以继续使用 BantuanKu。",
@@ -33,6 +37,7 @@ const zh = {
         emailPlaceholder: "请输入电子邮箱",
         password: "密码",
         passwordPlaceholder: "请输入密码",
+        forgotPassword: "忘记密码？",
         signIn: "登录",
         noAccount: "还没有账号？",
         createAccount: "创建账号",
@@ -41,6 +46,47 @@ const zh = {
         errors: {
           invalidCredentials: "您输入的电子邮箱或密码不正确。",
           signInFailed: "无法登录，请重试。",
+        },
+      },
+
+      forgotPassword: {
+        title: "忘记密码？",
+        subtitle: "请输入您的电子邮箱地址，我们将发送密码重置链接给您。",
+        sentSubtitle: "请查看您的电子邮箱以继续重置密码。",
+
+        sendResetLink: "发送重置链接",
+
+        emailSent: "重置邮件已发送",
+        emailSentDescription: "如果此电子邮箱已注册账户，密码重置链接将发送至该邮箱。请查看收件箱以继续。",
+
+        unableToSend: "无法发送邮件",
+
+        errors: {
+          sendFailed: "无法发送密码重置邮件，请重试。",
+        },
+      },
+
+      resetPassword: {
+        title: "重置密码",
+        subtitle: "请在下方输入您的新密码。",
+        successSubtitle: "您的密码已成功更新。",
+
+        newPassword: "新密码",
+        newPasswordPlaceholder: "请输入新密码",
+
+        confirmPassword: "确认新密码",
+        confirmPasswordPlaceholder: "请再次输入新密码",
+
+        resetPassword: "重置密码",
+
+        success: "密码重置成功",
+        successDescription:
+            "您的密码已更新。现在您可以使用新密码登录。",
+
+        unableToReset: "无法重置密码",
+
+        errors: {
+          resetFailed: "无法重置您的密码，请重试。",
         },
       },
 
@@ -59,6 +105,7 @@ const zh = {
         account: {
           title: "创建账号",
           subtitle: "创建您的账号以开始使用。",
+
           email: "电子邮箱",
           emailPlaceholder: "请输入电子邮箱",
 
@@ -147,7 +194,8 @@ const zh = {
           householdMonthlyIncome: "家庭每月总收入（RM）",
 
           householdMembers: "家庭成员",
-          householdMembersHelper: "添加与援助领取者居住在同一家庭的其他成员。",
+          householdMembersHelper:
+              "添加与援助领取者居住在同一家庭的其他成员。",
 
           householdMember: "家庭成员 {{number}}",
 
@@ -171,18 +219,21 @@ const zh = {
           addHouseholdMember: "添加家庭成员",
           removeHouseholdMember: "移除家庭成员",
 
-          livingAloneHelper: "如果援助领取者独居，则无需添加家庭成员。",
+          livingAloneHelper:
+              "如果援助领取者独居，则无需添加家庭成员。",
 
           removeMemberDialog: {
             title: "移除家庭成员？",
             message: "为此家庭成员填写的资料将会被移除。",
-          }
+          },
         },
 
         documents: {
           title: "辅助文件",
           subTitle: "上传您已有的文件，让日后的援助申请更加方便。",
-          optional: "文件为选填项目。您可以稍后在个人资料中添加或更新文件。",
+
+          optional:
+              "文件为选填项目。您可以稍后在个人资料中添加或更新文件。",
 
           identity: {
             title: "身份证明文件",
@@ -206,7 +257,7 @@ const zh = {
 
           upload: "上传",
           addAnother: "继续添加",
-          remove: "移除",
+          replace: "替换",
 
           fileRequirements: "PDF、JPG 或 PNG • 每个文件最大 10 MB",
 
@@ -223,7 +274,7 @@ const zh = {
           incompleteRegistration: "部分注册资料尚未填写完整，请检查之前的步骤。",
           languageUnavailable: "无法确定您的首选语言。",
           registrationFailed: "无法完成注册，请重试。",
-          identificationNumberExists: "此身份证号码已被注册。"
+          identificationNumberExists: "此身份证号码已被注册。",
         },
       },
     },

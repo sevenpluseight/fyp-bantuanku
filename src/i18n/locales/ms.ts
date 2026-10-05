@@ -26,6 +26,10 @@ const ms = {
     },
 
     auth: {
+      common: {
+        backToLogin: "Kembali ke Log Masuk",
+      },
+
       login: {
         title: "Selamat kembali",
         subtitle: "Log masuk untuk meneruskan ke BantuanKu.",
@@ -33,6 +37,7 @@ const ms = {
         emailPlaceholder: "Masukkan e-mel anda",
         password: "Kata Laluan",
         passwordPlaceholder: "Masukkan kata laluan anda",
+        forgotPassword: "Lupa kata laluan?",
         signIn: "Log Masuk",
         noAccount: "Belum mempunyai akaun?",
         createAccount: "Cipta akaun",
@@ -41,6 +46,46 @@ const ms = {
         errors: {
           invalidCredentials: "E-mel atau kata laluan yang anda masukkan tidak betul.",
           signInFailed: "Tidak dapat log masuk. Sila cuba lagi.",
+        },
+      },
+
+      forgotPassword: {
+        title: "Lupa Kata Laluan?",
+        subtitle: "Masukkan alamat e-mel anda dan kami akan menghantar pautan untuk menetapkan semula kata laluan anda.",
+        sentSubtitle: "Semak e-mel anda untuk meneruskan penetapan semula kata laluan.",
+
+        sendResetLink: "Hantar Pautan Tetapan Semula",
+
+        emailSent: "E-mel Tetapan Semula Dihantar",
+        emailSentDescription: "Jika akaun wujud untuk e-mel ini, pautan tetapan semula kata laluan telah dihantar. Semak peti e-mel anda untuk meneruskan.",
+
+        unableToSend: "Tidak Dapat Menghantar E-mel",
+
+        errors: {
+          sendFailed: "Kami tidak dapat menghantar e-mel tetapan semula kata laluan. Sila cuba lagi.",
+        },
+      },
+
+      resetPassword: {
+        title: "Tetapkan Semula Kata Laluan",
+        subtitle: "Masukkan kata laluan baharu anda di bawah.",
+        successSubtitle: "Kata laluan anda telah berjaya dikemas kini.",
+
+        newPassword: "Kata Laluan Baharu",
+        newPasswordPlaceholder: "Masukkan kata laluan baharu anda",
+
+        confirmPassword: "Sahkan Kata Laluan Baharu",
+        confirmPasswordPlaceholder: "Masukkan semula kata laluan baharu anda",
+
+        resetPassword: "Tetapkan Semula Kata Laluan",
+
+        success: "Kata Laluan Berjaya Ditetapkan Semula",
+        successDescription: "Kata laluan anda telah dikemas kini. Anda kini boleh log masuk menggunakan kata laluan baharu anda.",
+
+        unableToReset: "Tidak Dapat Menetapkan Semula Kata Laluan",
+
+        errors: {
+          resetFailed: "Kami tidak dapat menetapkan semula kata laluan anda. Sila cuba lagi.",
         },
       },
 
@@ -177,12 +222,13 @@ const ms = {
           removeMemberDialog: {
             title: "Buang ahli isi rumah?",
             message: "Maklumat yang dimasukkan untuk ahli isi rumah ini akan dibuang.",
-          }
+          },
         },
 
         documents: {
           title: "Dokumen Sokongan",
           subTitle: "Muat naik dokumen yang anda sudah miliki untuk memudahkan permohonan bantuan pada masa akan datang.",
+
           optional: "Dokumen adalah pilihan. Anda boleh menambah atau mengemas kini dokumen kemudian melalui profil anda.",
 
           identity: {
@@ -224,7 +270,7 @@ const ms = {
           incompleteRegistration: "Sesetengah maklumat pendaftaran tidak lengkap. Sila semak langkah sebelumnya.",
           languageUnavailable: "Bahasa pilihan anda tidak dapat dikenal pasti.",
           registrationFailed: "Pendaftaran tidak dapat diselesaikan. Sila cuba lagi.",
-          identificationNumberExists: "Nombor kad pengenalan ini telah didaftarkan."
+          identificationNumberExists: "Nombor kad pengenalan ini telah didaftarkan.",
         },
       },
     },

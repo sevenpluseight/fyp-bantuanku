@@ -15,10 +15,11 @@ export const supabase = createClient(
     supabasePublishableKey,
     {
         auth: {
-            storage: localStorage,
-            autoRefreshToken: true,
-            persistSession: true,
-            detectSessionInUrl: false,
+          storage: localStorage,
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: false,
+          flowType: "implicit",
         },
     }
 );

@@ -1,6 +1,7 @@
 import { Session, User } from "@supabase/supabase-js";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { supabase } from "../lib/supabase";
+import * as Linking from "expo-linking";
 
 /**
  * Authentication and registration state flow:
@@ -20,12 +21,23 @@ import { supabase } from "../lib/supabase";
  * In that case, the session is refreshed and the profile check is retried once. A failed profile check
  * does not automatically mean that registration is incomplete.
  *
+ * Password recovery is handled separately from the normal authenticated application flow.
+ * A valid recovery deep link creates a temporary Supabase session and sets
+ * passwordRecoveryInProgress to true. RootNavigator uses this state to render
+ * ResetPasswordScreen directly. Normal registration/profile checks are skipped while
+ * password recovery is in progress.
+ *
  * [Summary]
  * Registration starts -> registrationInProgress = true
  * Auth session created -> onAuthStateChange -> profile may not exist yet
  * Registration RPC succeeds -> optional documents are uploaded
  * Registration finishes -> registrationInProgress = false
  * refreshRegistrationStatus -> profile exists -> MainTabNavigator
+ *
+ * Password recovery link -> recovery session established
+ * passwordRecoveryInProgress = true -> ResetPasswordScreen
+ * Password updated -> recovery session signed out
+ * passwordRecoveryInProgress = false -> Login
  */
 
 type AuthContextValue = {
@@ -36,6 +48,8 @@ type AuthContextValue = {
   registrationInProgress: boolean;
   setRegistrationInProgress: (inProgress: boolean) => void;
   refreshRegistrationStatus: () => Promise<void>;
+  passwordRecoveryInProgress: boolean;
+  setPasswordRecoveryInProgress: (inProgress: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -51,8 +65,10 @@ export default function AuthProvider({
   const [loading, setLoading] = useState(true);
   const [registrationComplete, setRegistrationComplete] = useState(false);
   const [registrationInProgress, setRegistrationInProgressState] = useState(false);
+  const [passwordRecoveryInProgress, setPasswordRecoveryInProgressState] = useState(false);
 
   const registrationInProgressRef = useRef(false);
+  const passwordRecoveryInProgressRef = useRef(false);
 
   const setRegistrationInProgress = (
       inProgress: boolean
@@ -61,12 +77,23 @@ export default function AuthProvider({
     setRegistrationInProgressState(inProgress);
   };
 
+  const setPasswordRecoveryInProgress = (
+      inProgress: boolean
+  ) => {
+    passwordRecoveryInProgressRef.current = inProgress;
+    setPasswordRecoveryInProgressState(inProgress);
+  };
+
   const checkRegistrationStatus = async (
       currentSession: Session | null,
       retryOnJwtError = true
   ) => {
     if (!currentSession) {
       setRegistrationComplete(false);
+      return;
+    }
+
+    if (passwordRecoveryInProgressRef.current) {
       return;
     }
 
@@ -153,11 +180,143 @@ export default function AuthProvider({
     await checkRegistrationStatus(currentSession);
   }
 
+  const handlePasswordRecoveryUrl = async (
+      url: string
+  ) => {
+    let parsedUrl: URL;
+
+    try {
+      parsedUrl = new URL(url);
+    } catch (error) {
+      if (__DEV__) {
+        console.error(
+            "[AUTH] Failed to parse incoming URL:",
+            error
+        );
+      }
+
+      return;
+    }
+
+    if (
+        parsedUrl.protocol !== "bantuanku:" ||
+        parsedUrl.hostname !== "reset-password"
+    ) {
+      return;
+    }
+
+    try {
+      const hashParams = new URLSearchParams(
+          parsedUrl.hash.startsWith("#")
+              ? parsedUrl.hash.substring(1)
+              : parsedUrl.hash
+      );
+
+      const code = parsedUrl.searchParams.get("code");
+      const accessToken =
+          hashParams.get("access_token") ??
+          parsedUrl.searchParams.get("access_token");
+      const refreshToken =
+          hashParams.get("refresh_token") ??
+          parsedUrl.searchParams.get("refresh_token");
+
+      if (!code && (!accessToken || !refreshToken)) {
+        if (__DEV__) {
+          console.error(
+              "[AUTH] Password recovery URL is missing recovery credentials."
+          );
+        }
+
+        setPasswordRecoveryInProgress(false);
+        return;
+      }
+
+      let recoverySession: Session | null = null;
+
+      if (code) {
+        const {
+          data,
+          error
+        } = await supabase.auth.exchangeCodeForSession(code);
+
+        if (error) {
+          if (__DEV__) {
+            console.error(
+                "[AUTH] Failed to exchange password recovery code:",
+                error
+            );
+          }
+
+          setPasswordRecoveryInProgress(false);
+          return;
+        }
+
+        recoverySession = data.session;
+      } else if (accessToken && refreshToken) {
+        const {
+          data,
+          error
+        } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken
+        });
+
+        if (error) {
+          if (__DEV__) {
+            console.error(
+                "[AUTH] Failed to establish password recovery session:",
+                error
+            );
+          }
+
+          setPasswordRecoveryInProgress(false);
+          return;
+        }
+
+        recoverySession = data.session;
+      }
+
+      if (!recoverySession) {
+        if (__DEV__) {
+          console.error(
+              "[AUTH] Password recovery did not create a session."
+          );
+        }
+
+        setPasswordRecoveryInProgress(false);
+        return;
+      }
+
+      setSession(recoverySession);
+      setPasswordRecoveryInProgress(true);
+    } catch (error) {
+      if (__DEV__) {
+        console.error(
+            "[AUTH] Failed to process password recovery URL:",
+            error
+        );
+      }
+
+      setPasswordRecoveryInProgress(false);
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
 
+    let authSubscription: {
+      unsubscribe: () => void;
+    } | null = null;
+
+    let linkingSubscription: {
+      remove: () => void;
+    } | null = null;
+
     const initializeAuth = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      const {
+        data: { session: currentSession },
+        error
+      } = await supabase.auth.getSession();
 
       if (!mounted) {
         return;
@@ -165,47 +324,94 @@ export default function AuthProvider({
 
       if (error) {
         if (__DEV__) {
-          console.error("[AUTH] Failed to restore session:", error);
+          console.error(
+              "[AUTH] Failed to restore session:",
+              error
+          );
         }
 
         setSession(null);
         setRegistrationComplete(false);
-        setLoading(false);
+      } else {
+        setSession(currentSession);
 
+        await checkRegistrationStatus(currentSession);
+      }
+
+      if (!mounted) {
         return;
       }
 
-      setSession(data.session);
+      setLoading(false);
 
-      await checkRegistrationStatus(data.session);
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(
+          (event, nextSession) => {
+            if (__DEV__) {
+              console.log(
+                  "[AUTH] Auth state changed:",
+                  event,
+                  {
+                    hasSession: Boolean(nextSession)
+                  }
+              );
+            }
 
-      if (mounted) {
-        setLoading(false);
+            setSession(nextSession);
+
+            if (event === "PASSWORD_RECOVERY") {
+              setPasswordRecoveryInProgress(true);
+              return;
+            }
+
+            if (!nextSession) {
+              setRegistrationComplete(false);
+              return;
+            }
+
+            if (passwordRecoveryInProgressRef.current) {
+              return;
+            }
+
+            setTimeout(() => {
+              void checkRegistrationStatus(nextSession);
+            }, 0);
+          }
+      );
+
+      authSubscription = subscription;
+
+      const handleUrl = ({
+                           url
+                         }: {
+        url: string
+      }) => {
+        void handlePasswordRecoveryUrl(url);
+      }
+
+      linkingSubscription = Linking.addEventListener(
+          "url",
+          handleUrl
+      );
+
+      const initialUrl = await Linking.getInitialURL();
+
+      if (!mounted) {
+        return;
+      }
+
+      if (initialUrl) {
+        void handlePasswordRecoveryUrl(initialUrl);
       }
     };
 
     void initializeAuth();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(
-        (_event, nextSession) => {
-          setSession(nextSession);
-
-          if (!nextSession) {
-            setRegistrationComplete(false);
-            return;
-          }
-
-          setTimeout(() => {
-            void checkRegistrationStatus(nextSession);
-          }, 0);
-        }
-    );
-
     return () => {
       mounted = false;
-      subscription.unsubscribe();
+      authSubscription?.unsubscribe();
+      linkingSubscription?.remove();
     };
   }, []);
 
@@ -216,7 +422,9 @@ export default function AuthProvider({
     registrationComplete,
     registrationInProgress,
     setRegistrationInProgress,
-    refreshRegistrationStatus
+    refreshRegistrationStatus,
+    passwordRecoveryInProgress,
+    setPasswordRecoveryInProgress,
   };
 
   return (

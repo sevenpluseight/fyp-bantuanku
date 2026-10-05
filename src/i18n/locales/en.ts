@@ -26,6 +26,10 @@ const en = {
     },
 
     auth: {
+      common: {
+        backToLogin: "Back to Login",
+      },
+
       login: {
         title: "Welcome back",
         subtitle: "Sign in to continue to BantuanKu.",
@@ -33,6 +37,7 @@ const en = {
         emailPlaceholder: "Enter your email",
         password: "Password",
         passwordPlaceholder: "Enter your password",
+        forgotPassword: "Forgot password?",
         signIn: "Sign In",
         noAccount: "Don't have an account?",
         createAccount: "Create account",
@@ -41,7 +46,47 @@ const en = {
         errors: {
           invalidCredentials: "The email or password you entered is incorrect.",
           signInFailed: "Unable to sign in. Please try again.",
-        }
+        },
+      },
+
+      forgotPassword: {
+        title: "Forgot Password?",
+        subtitle: "Enter your email address and we'll send you a link to reset your password.",
+        sentSubtitle: "Check your email to continue resetting your password.",
+
+        sendResetLink: "Send Reset Link",
+
+        emailSent: "Reset Email Sent",
+        emailSentDescription: "If an account exists for this email, a password reset link has been sent. Check your inbox to continue.",
+
+        unableToSend: "Unable to Send Email",
+
+        errors: {
+          sendFailed: "We couldn't send the password reset email. Please try again.",
+        },
+      },
+
+      resetPassword: {
+        title: "Reset Password",
+        subtitle: "Enter your new password below.",
+        successSubtitle: "Your password has been updated successfully.",
+
+        newPassword: "New Password",
+        newPasswordPlaceholder: "Enter your new password",
+
+        confirmPassword: "Confirm New Password",
+        confirmPasswordPlaceholder: "Enter your new password again",
+
+        resetPassword: "Reset Password",
+
+        success: "Password Reset Successfully",
+        successDescription: "Your password has been updated. You can now sign in with your new password.",
+
+        unableToReset: "Unable to Reset Password",
+
+        errors: {
+          resetFailed: "We couldn't reset your password. Please try again.",
+        },
       },
 
       register: {
@@ -177,13 +222,15 @@ const en = {
           removeMemberDialog: {
             title: "Remove household member?",
             message: "The information entered for this household member will be removed.",
-          }
+          },
         },
+
         documents: {
           title: "Supporting Documents",
           subTitle: "Upload documents you already have to make future aid applications easier.",
 
           optional: "Documents are optional. You can add or update them later from your profile.",
+
           identity: {
             title: "Identification Document",
             description: "MyKad, MyPR or other identification document",
@@ -222,7 +269,7 @@ const en = {
           incompleteRegistration: "Some registration information is missing. Please review the previous steps.",
           languageUnavailable: "Unable to determine your preferred language.",
           registrationFailed: "Registration could not be completed. Please try again.",
-          identificationNumberExists: "This IC number is already registered."
+          identificationNumberExists: "This IC number is already registered.",
         },
       },
     },
