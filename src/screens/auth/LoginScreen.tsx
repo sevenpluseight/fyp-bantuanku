@@ -144,6 +144,17 @@ export default function LoginScreen({
                     )}
                 />
 
+                <Pressable
+                  accessibilityRole="link"
+                  onPress={() => navigation.navigate("ForgotPassword")}
+                  hitSlop={8}
+                  className="self-end"
+                >
+                  <Text className="text-sm font-semibold text-primary">
+                    {t("auth.login.forgotPassword")}
+                  </Text>
+                </Pressable>
+
                 <Button
                     fullWidth
                     loading={isSubmitting}
