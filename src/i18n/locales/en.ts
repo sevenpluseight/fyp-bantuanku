@@ -158,6 +158,9 @@ const en = {
 
           stateTerritory: "State / Federal Territory",
           selectStateTerritory: "Select state or Federal Territory",
+
+          "locationAutoHelper": "City and state are automatically filled based on your postcode.",
+          "locationManualHelper": "We couldn't retrieve your location. Please enter your city and state manually."
         },
 
         householdIncome: {
