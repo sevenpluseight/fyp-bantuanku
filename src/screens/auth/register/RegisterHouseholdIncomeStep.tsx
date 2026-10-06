@@ -145,6 +145,8 @@ export default function RegisterHouseholdIncomeStep({
     handleSubmit,
     trigger,
     watch,
+    setValue,
+    clearErrors,
     formState: {errors, submitCount}
   } = useForm<RegisterHouseholdIncomeFormData>({
     resolver: zodResolver(schema),
@@ -167,6 +169,37 @@ export default function RegisterHouseholdIncomeStep({
   });
 
   const householdMembers = watch("householdMembers");
+  const employmentStatus = watch("employmentStatus");
+  const incomeSource = watch("incomeSource");
+
+  const availableIncomeSourceOptions = useMemo(() => {
+    if (employmentStatus === "employed") {
+      return incomeSourceOptions.filter(
+          (option) => option.value === "salary"
+      );
+    }
+
+    if (employmentStatus === "self_employed") {
+      return incomeSourceOptions.filter(
+          (option) => option.value === "self_employment"
+      );
+    }
+
+    if (employmentStatus === "retired") {
+      return incomeSourceOptions.filter(
+          (option) =>
+              option.value !== "salary" &&
+              option.value !== "self_employment"
+      );
+    }
+
+    return incomeSourceOptions.filter(
+        (option) =>
+            option.value !== "salary" &&
+            option.value !== "self_employment" &&
+            option.value !== "pension"
+    );
+  }, [employmentStatus, incomeSourceOptions]);
 
   const [expandedMemberIndex, setExpandedMemberIndex] =
     useState<number | null>(
@@ -180,6 +213,63 @@ export default function RegisterHouseholdIncomeStep({
       void trigger();
     }
   }, [i18n.resolvedLanguage, submitCount, trigger]);
+
+  useEffect(() => {
+    if (employmentStatus === "employed") {
+      if (incomeSource !== "salary") {
+        setValue(
+            "incomeSource",
+            "salary",
+            {
+              shouldValidate: true
+            }
+        );
+      }
+
+      return;
+    }
+
+    if (employmentStatus === "self_employed") {
+      if (incomeSource !== "self_employment") {
+        setValue(
+            "incomeSource",
+            "self_employment",
+            {
+              shouldValidate: true
+            }
+        );
+      }
+
+      return;
+    }
+
+    if (incomeSource && !availableIncomeSourceOptions.some(
+        (option) => option.value === incomeSource
+    )
+    ) {
+      setValue(
+          "incomeSource",
+          "",
+          {
+            shouldValidate: false
+          }
+      );
+
+      clearErrors("incomeSource");
+    }
+  }, [employmentStatus, incomeSource, availableIncomeSourceOptions, setValue, clearErrors]);
+
+  useEffect(() => {
+    if (incomeSource === "no_income") {
+      setValue(
+          "personalMonthlyIncome",
+          "0",
+          {
+            shouldValidate: true
+          }
+      );
+    }
+  }, [incomeSource, setValue]);
 
   useEffect(() => {
     const householdMemberErrors = errors.householdMembers;
@@ -280,7 +370,7 @@ export default function RegisterHouseholdIncomeStep({
                       title={t("auth.register.householdIncome.selectIncomeSource")}
                       value={value}
                       onChange={onChange}
-                      options={incomeSourceOptions}
+                      options={availableIncomeSourceOptions}
                       error={errors.incomeSource?.message}
                       required
                   />
@@ -304,6 +394,7 @@ export default function RegisterHouseholdIncomeStep({
                       onBlur={onBlur}
                       error={errors.personalMonthlyIncome?.message}
                       keyboardType="decimal-pad"
+                      editable={incomeSource !== "no_income"}
                       required
                   />
               )}

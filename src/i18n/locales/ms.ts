@@ -158,6 +158,9 @@ const ms = {
 
           stateTerritory: "Negeri / Wilayah Persekutuan",
           selectStateTerritory: "Pilih negeri atau Wilayah Persekutuan",
+
+          "locationAutoHelper": "Bandar dan negeri diisi secara automatik berdasarkan poskod anda.",
+          "locationManualHelper": "Kami tidak dapat mendapatkan lokasi anda. Sila masukkan bandar dan negeri secara manual."
         },
 
         householdIncome: {

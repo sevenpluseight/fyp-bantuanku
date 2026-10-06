@@ -16,4 +16,5 @@ export type RegistrationDocumentSection = {
   titleKey: string;
   descriptionKey: string;
   multiple: boolean;
+  maxFiles?: number;
 };

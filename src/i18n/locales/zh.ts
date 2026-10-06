@@ -159,6 +159,9 @@ const zh = {
 
           stateTerritory: "州属／联邦直辖区",
           selectStateTerritory: "选择州属或联邦直辖区",
+
+          "locationAutoHelper": "城市和州属将根据您的邮政编码自动填写。",
+          "locationManualHelper": "无法获取您的位置信息，请手动填写城市和州属。"
         },
 
         householdIncome: {
