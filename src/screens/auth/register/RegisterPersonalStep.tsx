@@ -31,7 +31,7 @@ const formatMyKad = (value: string) => {
     return `${digits.slice(0, 6)}-${digits.slice(6)}`;
   }
 
-  return `${digits.slice(0, 6)}-${digits.slice(6, 8)}-${digits.slice(8)}`
+  return `${digits.slice(0, 6)}-${digits.slice(6, 8)}-${digits.slice(8)}`;
 };
 
 const formatMobileNumber = (value: string) => {
@@ -166,12 +166,16 @@ export default function RegisterPersonalStep({
                           "dateOfBirth",
                           undefined,
                           {
-                            shouldValidate: true,
+                            shouldValidate: false,
                             shouldDirty: true,
                           }
                       );
 
                       setDobDerivedFromMyKad(false);
+                    }
+
+                    if (formatted.length === 14) {
+                      void trigger("myKadNumber");
                     }
                   }}
                   onBlur={onBlur}
