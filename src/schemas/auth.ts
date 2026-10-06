@@ -2,7 +2,7 @@ import { z } from "zod";
 import { TFunction } from "i18next";
 import {
   CITIZENSHIP_VALUES, EMPLOYMENT_STATUS_VALUES,
-  HOUSEHOLD_RELATIONSHIP_VALUES, INCOME_SOURCE_VALUES,
+  HOUSEHOLD_RELATIONSHIP_VALUES, INCOME_SOURCE_VALUES, MYKAD_BIRTHPLACE_CODES,
   STATE_TERRITORY_VALUES
 } from "../constants/registration";
 
@@ -53,7 +53,6 @@ export const resetPasswordSchema = (t: TFunction) => z.object({
 export type ResetPasswordFormData = z.infer<ReturnType<typeof resetPasswordSchema>>;
 
 export const registerSchema = (t: TFunction) => z.object({
-  // TODO-1: Enhance validation - gmail, yahoo, icloud, hotmail, outlook
   email: z
       .string()
       .trim()
@@ -102,7 +101,6 @@ export const registerPersonalSchema = (t: TFunction) => z.object({
       .trim()
       .min(1, t("validation.fullNameRequired")),
 
-  // TODO-2: Only allow valid state code - https://www.jpn.gov.my/en/information/state-code/
   myKadNumber: z
       .string()
       .trim()
@@ -110,6 +108,51 @@ export const registerPersonalSchema = (t: TFunction) => z.object({
       .regex(
           /^\d{6}-\d{2}-\d{4}$/,
           t("validation.myKadNumberInvalid")
+      )
+      .refine(
+          (value) => {
+            if (!/^\d{6}-\d{2}-\d{4}$/.test(value)) {
+              return true;
+            }
+
+            const birthplaceCode = value.slice(7, 9);
+
+            return MYKAD_BIRTHPLACE_CODES.some(
+                (code) => code === birthplaceCode
+            );
+          },
+          {
+            message: t("validation.myKadNumberInvalid")
+          }
+      )
+      .refine(
+          (value) => {
+            if (!/^\d{6}-\d{2}-\d{4}$/.test(value)) {
+              return true;
+            }
+
+            const month = Number(value.slice(2, 4));
+            const day = Number(value.slice(4, 6));
+
+            if (
+                month < 1 ||
+                month > 12 ||
+                day < 1
+            ) {
+              return false;
+            }
+
+            const daysInMonth = new Date(
+                2000,
+                month,
+                0
+            ).getDate();
+
+            return day <= daysInMonth;
+          },
+          {
+            message: t("validation.myKadNumberInvalid")
+          }
       ),
 
   dateOfBirth: z
@@ -155,7 +198,6 @@ export const registerResidenceSchema = (t: TFunction) => z.object({
       .trim()
       .optional(),
 
-  // TODO-3: Only allow valid postcode - get from API: https://api-ninjas.com/postal-code/malaysia
   postcode: z
       .string()
       .trim()
@@ -225,7 +267,6 @@ export const registerHouseholdIncomeSchema = (t: TFunction) => {
             }
         ),
 
-    // TODO-4: Enhance incomeSource with the chosen employmentStatus
     incomeSource: z
         .union([
           z.literal(""),
@@ -238,7 +279,6 @@ export const registerHouseholdIncomeSchema = (t: TFunction) => {
             }
         ),
 
-    // TODO-5: Add validation - No zero income amount and maximum 7 digits (9,999,999)
     personalMonthlyIncome: z
         .string()
         .trim()
@@ -249,7 +289,7 @@ export const registerHouseholdIncomeSchema = (t: TFunction) => {
 
 
               return (
-                  Number.isFinite(amount) && amount >= 0
+                  Number.isFinite(amount) && amount >= 0 && amount <= 9999999
               );
             },
             {
@@ -266,7 +306,7 @@ export const registerHouseholdIncomeSchema = (t: TFunction) => {
               const amount = Number(value)
 
               return (
-                  Number.isFinite(amount) && amount >= 0
+                  Number.isFinite(amount) && amount >= 0 && amount <= 9999999
               );
             },
             {
