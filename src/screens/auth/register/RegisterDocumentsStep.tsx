@@ -5,7 +5,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { ALLOWED_DOCUMENT_MIME_TYPES, MAXIMUM_DOCUMENT_FILE_SIZE } from "../../../constants/documents";
 import { Pressable, Text, View } from "react-native";
 import { REGISTRATION_DOCUMENT_SECTIONS } from "../../../constants/registration";
-import { FileText, Plus, Trash2, Upload } from "lucide-react-native";
+import { FileText, Plus, RefreshCw, Trash2, Upload } from "lucide-react-native";
 
 import RegistrationProgress from "../../../components/auth/RegistrationProgress";
 import Card from "../../../components/ui/Card";
@@ -58,6 +58,17 @@ export default function RegisterDocumentsStep({
       section: RegistrationDocumentSection,
       replaceLocalId?: string
   )=> {
+    if (
+        !replaceLocalId &&
+        section.maxFiles !== undefined &&
+        documents.filter(
+            (document) =>
+                document.documentType === section.type
+        ).length >= section.maxFiles
+    ) {
+      return;
+    }
+
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: [
@@ -204,8 +215,14 @@ export default function RegisterDocumentsStep({
                             document.documentType === section.type
                     );
 
-                const hasDocuments =
-                    sectionDocuments.length > 0;
+                const hasDocuments = sectionDocuments.length > 0;
+
+                const canAddAnotherFile =
+                    section.multiple &&
+                    (
+                        section.maxFiles === undefined ||
+                        sectionDocuments.length < section.maxFiles
+                    );
 
                 return (
                     <View
@@ -244,14 +261,14 @@ export default function RegisterDocumentsStep({
                                 }
                                 accessibilityRole="button"
                                 hitSlop={8}
-                                className="flex-row items-center gap-1"
+                                className="min-h-9 flex-row items-center justify-center rounded-lg bg-primary/10 px-3"
                             >
                               <Upload
                                   size={16}
                                   color="#0352CE"
                               />
 
-                              <Text className="text-sm font-semibold text-primary">
+                              <Text className="ml-1.5 text-xs font-semibold text-primary">
                                 {t("auth.register.documents.upload")}
                               </Text>
                             </Pressable>
@@ -293,9 +310,12 @@ export default function RegisterDocumentsStep({
                                             }
                                             accessibilityRole="button"
                                             hitSlop={8}
-                                            className="ml-3"
+                                            className="ml-3 min-h-8 flex-row items-center justify-center rounded-lg
+                                            border border-primary/20 bg-background px-2.5"
                                         >
-                                          <Text className="text-xs font-semibold text-primary">
+                                          <RefreshCw size={14} color="#0352CE" />
+
+                                          <Text className="ml-1.5 text-xs font-semibold text-primary">
                                             {t("auth.register.documents.replace")}
                                           </Text>
                                         </Pressable>
@@ -307,10 +327,10 @@ export default function RegisterDocumentsStep({
                                             accessibilityRole="button"
                                             accessibilityLabel={t("common.remove")}
                                             hitSlop={8}
-                                            className="ml-3"
+                                            className="ml-3 h-8 w-8 items-center justify-center rounded-lg bg-accent-red/10"
                                         >
                                           <Trash2
-                                              size={16}
+                                              size={15}
                                               color="#F5222D"
                                           />
                                         </Pressable>
@@ -319,7 +339,7 @@ export default function RegisterDocumentsStep({
                                 }
                             )}
 
-                            {section.multiple && (
+                            {canAddAnotherFile && (
                                 <Pressable
                                     onPress={() =>
                                         void pickDocument(section)
@@ -336,6 +356,12 @@ export default function RegisterDocumentsStep({
                                     {t("auth.register.documents.addAnother")}
                                   </Text>
                                 </Pressable>
+                            )}
+
+                            {section.multiple && section.maxFiles !== undefined && (
+                                <Text className="text-xs text-muted-foreground">
+                                  {sectionDocuments.length} / {section.maxFiles}
+                                </Text>
                             )}
                           </View>
                       )}
