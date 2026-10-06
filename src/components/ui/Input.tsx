@@ -46,14 +46,17 @@ export default function Input({
               items-center
               rounded-xl
               border
-              bg-background
               px-4
+              ${
+                isDisabled 
+                  ? "border-border bg-muted opacity-60"
+                  : "border-border bg-background"  
+              }
               ${
                 error
                   ? "border-accent-red"
-                  : "border-border"
+                  : ""
               }
-              ${isDisabled ? "opacity-50" : ""}
             `}
         >
           <TextInput
@@ -70,7 +73,7 @@ export default function Input({
                 flex-1
                 py-3
                 text-base
-                text-foreground
+                ${isDisabled ? "text-muted-foreground" : "text-foreground"}
                 ${className}
               `}
           />
