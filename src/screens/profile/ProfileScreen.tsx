@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getProfileOverview, ProfileOverview } from "../../services/profile/profileService";
+import {getProfileOverview, ProfileOverview, updatePreferredLanguage} from "../../services/profile/profileService";
 import { supabase } from "../../lib/supabase";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { BriefcaseBusiness, ChevronRight, Globe2, House, UserRound, UsersRound } from "lucide-react-native";
@@ -12,6 +12,9 @@ import ScreenHeader from "../../components/layout/ScreenHeader";
 import Button from "../../components/ui/Button";
 import Section from "../../components/layout/Section";
 import Card from "../../components/ui/Card";
+import Modal from "../../components/ui/Modal";
+import {SupportedLanguage} from "../../i18n/types";
+import {changeLanguage} from "../../i18n";
 
 type ProfileRowProps = {
   icon: typeof UserRound;
@@ -103,6 +106,9 @@ export default function ProfileScreen({
   const [profile, setProfile] = useState<ProfileOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<SupportedLanguage>("en");
+  const [savingLanguage, setSavingLanguage] = useState(false);
 
   const loadProfile = useCallback(async () => {
     try {
@@ -193,6 +199,52 @@ export default function ProfileScreen({
     }
   };
 
+  const handleOpenLanguageModal = () => {
+    if (!profile) {
+      return;
+    }
+
+    setSelectedLanguage(profile.preferredLanguage);
+    setLanguageModalVisible(true);
+  };
+
+  const handleSaveLanguage = async () => {
+    if (!profile) {
+      return;
+    }
+
+    if (selectedLanguage === profile.preferredLanguage) {
+      setLanguageModalVisible(false);
+      return;
+    }
+
+    try {
+      setSavingLanguage(true);
+
+      await updatePreferredLanguage(
+          profile.id,
+          selectedLanguage
+      );
+
+      setProfile({
+        ...profile,
+        preferredLanguage: selectedLanguage
+      });
+
+      await changeLanguage(selectedLanguage);
+
+      setLanguageModalVisible(false);
+    } catch (saveError) {
+      if (__DEV__) {
+        console.error(
+            "[PROFILE] Failed to update preferred language:", saveError
+        );
+      }
+    } finally {
+      setSavingLanguage(false);
+    }
+  };
+
   const handleSignOut = async () => {
     const { error: signOutError } = await supabase.auth.signOut();
 
@@ -204,6 +256,24 @@ export default function ProfileScreen({
       }
     }
   };
+
+  const languageOptions: {
+    value: SupportedLanguage;
+    label: string;
+  }[] = [
+    {
+      value: "en",
+      label: t("language.english")
+    },
+    {
+      value: "ms",
+      label: t("language.malay")
+    },
+    {
+      value: "zh",
+      label: t("language.chinese")
+    }
+  ];
 
   if (loading) {
     return (
@@ -334,6 +404,7 @@ export default function ProfileScreen({
               icon={Globe2}
               title={t("profile.language.title")}
               description={getLanguageLabel()}
+              onPress={handleOpenLanguageModal}
             />
           </Card>
         </Section>
@@ -350,6 +421,69 @@ export default function ProfileScreen({
             {t("profile.account.signOut")}
           </Button>
         </Section>
+
+        <Modal
+            visible={languageModalVisible}
+            title={t("profile.language.selectLanguageTitle")}
+            description={t("profile.language.selectLanguageDescription")}
+            onClose={() => {
+              if (!savingLanguage) {
+                setLanguageModalVisible(false);
+              }
+            }}
+        >
+          <View className="gap-3">
+            {languageOptions.map((option) => {
+              const selected = selectedLanguage === option.value;
+
+              return (
+                  <Pressable
+                      key={option.value}
+                      onPress={() => setSelectedLanguage(option.value)}
+                      className={
+                        selected
+                            ? "flex-row items-center rounded-xl border border-primary bg-primary/5 px-4 py-4"
+                            : "flex-row items-center rounded-xl border border-border px-4 py-4"
+                      }
+                  >
+                    <View
+                        className={
+                          selected
+                              ? "h-5 w-5 items-center justify-center rounded-full border-[6px] border-primary"
+                              : "h-5 w-5 rounded-full border border-muted-foreground"
+                        }
+                    />
+
+                    <Text className="ml-3 flex-1 text-base font-medium text-foreground">
+                      {option.label}
+                    </Text>
+                  </Pressable>
+              );
+            })}
+          </View>
+
+          <View className="mt-6 flex-row gap-3">
+            <Button
+                variant="outline"
+                onPress={() => setLanguageModalVisible(false)}
+                disabled={savingLanguage}
+                className="flex-1"
+            >
+              {t("common.cancel")}
+            </Button>
+
+            <Button
+                onPress={handleSaveLanguage}
+                disabled={savingLanguage}
+                className="flex-1"
+            >
+              {savingLanguage
+                ? t("common.saving")
+                : t("common.save")
+              }
+            </Button>
+          </View>
+        </Modal>
       </Screen>
   );
 }
