@@ -108,3 +108,47 @@ export const getProfileOverview = async (): Promise<ProfileOverview> => {
         : null,
   };
 };
+
+export const updatePreferredLanguage = async (
+    profileId: string,
+    preferredLanguage: SupportedLanguage
+) => {
+  const { error } = await supabase
+      .from("profiles")
+      .update({ preferred_language: preferredLanguage })
+      .eq("id", profileId);
+
+  if (error) {
+    throw error;
+  }
+};
+
+export const getPreferredLanguage = async (
+    userId: string
+): Promise<SupportedLanguage | null> => {
+  const { data, error } = await supabase
+      .from("profiles")
+      .select("preferred_language")
+      .eq(
+          "user_id",
+          userId
+      )
+      .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  if (
+      !data ||
+      (
+          data.preferred_language !== "en" &&
+          data.preferred_language !== "ms" &&
+          data.preferred_language !== "zh"
+      )
+  ) {
+    return null;
+  }
+
+  return data.preferred_language;
+};
