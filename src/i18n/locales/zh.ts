@@ -11,6 +11,7 @@ const zh = {
       complete: "完成",
       edit: "编辑",
       save: "保存",
+      saving: "正在保存...",
       discard: "放弃",
       keepEditing: "继续编辑",
 
@@ -350,6 +351,9 @@ const zh = {
 
       language: {
         title: "语言",
+
+        selectLanguageTitle: "选择语言",
+        selectLanguageDescription: "选择您想使用的语言。"
       },
 
       account: {

@@ -10,7 +10,8 @@ const ms = {
       remove: "Buang",
       complete: "Selesai",
       edit: "Edit",
-      save: "Simpan", // TBC
+      save: "Simpan",
+      saving: "Menyimpan",
       discard: "Buang",
       keepEditing: "Teruskan mengedit",
 
@@ -346,6 +347,9 @@ const ms = {
 
       language: {
         title: "Bahasa",
+
+        selectLanguageTitle: "Pilih Bahasa",
+        selectLanguageDescription: "Pilih bahasa yang ingin anda gunakan."
       },
 
       account: {

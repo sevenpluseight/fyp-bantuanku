@@ -11,6 +11,7 @@ const en = {
       complete: "Complete",
       edit: "Edit",
       save: "Save",
+      saving: "Saving...",
       discard: "Discard",
       keepEditing: "Keep Editing",
 
@@ -345,6 +346,9 @@ const en = {
 
       language: {
         title: "Language",
+
+        selectLanguageTitle: "Select Language",
+        selectLanguageDescription: "Choose the language you would like to use.",
       },
 
       account: {
