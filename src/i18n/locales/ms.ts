@@ -354,6 +354,7 @@ const ms = {
 
       account: {
         signOut: "Log Keluar",
+        signOutDescription: "Adakah anda pasti mahu log keluar daripada akaun anda?"
       },
 
       errors: {

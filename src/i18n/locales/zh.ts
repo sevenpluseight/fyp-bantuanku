@@ -358,6 +358,7 @@ const zh = {
 
       account: {
         signOut: "退出登录",
+        signOutDescription: "确定要退出当前账户吗？"
       },
 
       errors: {

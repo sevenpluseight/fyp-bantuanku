@@ -353,6 +353,7 @@ const en = {
 
       account: {
         signOut: "Sign Out",
+        signOutDescription: "Are you sure you want to sign out of your account?"
       },
 
       errors: {
