@@ -15,6 +15,7 @@ import Card from "../../components/ui/Card";
 import Modal from "../../components/ui/Modal";
 import {SupportedLanguage} from "../../i18n/types";
 import {changeLanguage} from "../../i18n";
+import AlertDialog from "../../components/ui/AlertDialog";
 
 type ProfileRowProps = {
   icon: typeof UserRound;
@@ -109,6 +110,8 @@ export default function ProfileScreen({
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<SupportedLanguage>("en");
   const [savingLanguage, setSavingLanguage] = useState(false);
+  const [signOutDialogVisible, setSignOutDialogVisible] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   const loadProfile = useCallback(async () => {
     try {
@@ -246,14 +249,30 @@ export default function ProfileScreen({
   };
 
   const handleSignOut = async () => {
-    const { error: signOutError } = await supabase.auth.signOut();
+    try {
+      setSigningOut(true);
 
-    if (signOutError) {
+      const { error: signOutError } = await supabase.auth.signOut();
+
+      if (signOutError) {
+        if (__DEV__) {
+          console.error(
+              "[AUTH] Sign out failed:", signOutError
+          );
+        }
+
+        return;
+      }
+
+      setSignOutDialogVisible(false);
+    } catch (error) {
       if (__DEV__) {
         console.error(
-            "[AUTH] Sign out failed:", signOutError
+            "[AUTH] Unexpected sign out error:", error
         );
       }
+    } finally {
+      setSigningOut(false);
     }
   };
 
@@ -415,8 +434,8 @@ export default function ProfileScreen({
             className="mt-8"
         >
           <Button
-              variant="outline"
-              onPress={handleSignOut}
+              variant="destructive"
+              onPress={() => setSignOutDialogVisible(true)}
           >
             {t("profile.account.signOut")}
           </Button>
@@ -484,6 +503,21 @@ export default function ProfileScreen({
             </Button>
           </View>
         </Modal>
+
+        <AlertDialog
+            visible={signOutDialogVisible}
+            variant="warning"
+            confirmVariant="destructive"
+            title={t("profile.account.signOut")}
+            message={t("profile.account.signOutDescription")}
+            confirmText={t("common.ok")}
+            cancelText={t("common.cancel")}
+            onConfirm={() => void handleSignOut()}
+            onCancel={() => setSignOutDialogVisible(false)}
+            onDismiss={() => setSignOutDialogVisible(false)}
+            dismissible={!signingOut}
+            loading={signingOut}
+        />
       </Screen>
   );
 }
