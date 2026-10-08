@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {getProfileOverview, ProfileOverview, updatePreferredLanguage} from "../../services/profile/profileService";
+import { getProfileOverview, ProfileOverview, updatePreferredLanguage } from "../../services/profile/profileService";
 import { supabase } from "../../lib/supabase";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { BriefcaseBusiness, ChevronRight, Globe2, House, UserRound, UsersRound } from "lucide-react-native";
@@ -384,6 +384,7 @@ export default function ProfileScreen({
               icon={UsersRound}
               title={t("profile.household.title")}
               description={getHouseholdDescription()}
+              onPress={() => navigation.navigate("Household")}
               showDivider
             />
 

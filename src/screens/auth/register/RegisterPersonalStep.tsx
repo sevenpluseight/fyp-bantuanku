@@ -1,4 +1,4 @@
-import { RegisterPersonalFormData, registerPersonalSchema } from "../../../schemas/auth";
+import { RegisterPersonalFormData, registerPersonalSchema } from "../../../schemas/registration";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pressable, Text, View } from "react-native";
