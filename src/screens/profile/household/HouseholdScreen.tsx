@@ -204,7 +204,7 @@ export default function HouseholdScreen({
                 </Text>
 
                 <View className="mt-5">
-                  <Button onPress={() => {}}>
+                  <Button onPress={() => navigation.navigate("AddHouseholdMember")}>
                     {t("profile.household.addMember")}
                   </Button>
                 </View>
@@ -236,7 +236,7 @@ export default function HouseholdScreen({
 
               <Button
                 variant="outline"
-                onPress={() => {}}
+                onPress={() => navigation.navigate("AddHouseholdMember")}
               >
                 {t("profile.household.addMember")}
               </Button>

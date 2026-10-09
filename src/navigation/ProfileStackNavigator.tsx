@@ -3,6 +3,7 @@ import { ProfileStackParamList } from "../types/tabNavigator";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import PersonalInfoScreen from "../screens/profile/PersonalInfoScreen";
 import HouseholdScreen from "../screens/profile/household/HouseholdScreen";
+import AddHouseholdMemberScreen from "../screens/profile/household/AddHouseholdMemberScreen";
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
@@ -24,10 +25,15 @@ export default function ProfileStackNavigator() {
             component={HouseholdScreen}
         />
 
-        {/*<Stack.Screen*/}
-        {/*    name="AddHouseholdMember"*/}
-        {/*    component={}*/}
+        {/*<Stack.Screen */}
+        {/*  name="HouseholdMember"*/}
+        {/*  component={}*/}
         {/*/>*/}
+
+        <Stack.Screen
+            name="AddHouseholdMember"
+            component={AddHouseholdMemberScreen}
+        />
       </Stack.Navigator>
 
   );

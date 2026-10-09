@@ -153,6 +153,18 @@ export type CreateHouseholdMemberInput = {
   fullName: string;
   relationship: string;
   dateOfBirth: Date;
+  identificationNumber: string;
+  gender: string;
+  citizenship: string;
+  isDependent: boolean | null;
+  employmentStatus: string;
+  occupation: string;
+  monthlyIncome: string;
+  isStudent: boolean | null;
+  studyMode: string,
+  institutionType: string;
+  isOku: boolean | null;
+  okuRegistered: boolean | null;
 };
 
 export const createHouseholdMember =
@@ -173,8 +185,32 @@ export const createHouseholdMember =
       .insert({
         profile_id: profileId,
         full_name: input.fullName.trim(),
+        identification_no: input.identificationNumber.trim() || null,
         relationship: input.relationship,
-        date_of_birth: `${year}-${month}-${day}`
+        date_of_birth: `${year}-${month}-${day}`,
+        gender: input.gender || null,
+        citizenship: input.citizenship || null,
+        is_dependent: input.isDependent,
+        employment_status: input.employmentStatus || null,
+        occupation: input.occupation || null,
+        monthly_income:
+            input.monthlyIncome.trim() === ""
+                ? null
+                : Number(input.monthlyIncome),
+        is_student: input.isStudent,
+        study_mode:
+            input.isStudent === true
+                ? input.studyMode || null
+                : null,
+        institution_type:
+            input.isStudent === true
+                ? input.studyMode || null
+                : null,
+        is_oku: input.isOku,
+        oku_registered:
+            input.isOku === true
+                ? input.okuRegistered
+                : null
       })
       .select("id")
       .single();

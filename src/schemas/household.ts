@@ -6,6 +6,7 @@ import {
   HOUSEHOLD_RELATIONSHIP_VALUES,
   MYKAD_BIRTHPLACE_CODES
 } from "../constants/registration";
+import { getDobFromMyKad } from "../lib/myKad";
 
 export const householdMemberSchema = (t: TFunction) => z.object({
   fullName: z
@@ -43,8 +44,7 @@ export const addHouseholdMemberSchema = (t: TFunction) => {
       .safeExtend({
         identificationNumber: z
             .string()
-            .trim()
-            .default(""),
+            .trim(),
 
         gender: z
             .union([
@@ -70,8 +70,7 @@ export const addHouseholdMemberSchema = (t: TFunction) => {
 
         occupation: z
             .string()
-            .trim()
-            .default(""),
+            .trim(),
 
         monthlyIncome: z
             .string()
@@ -101,13 +100,11 @@ export const addHouseholdMemberSchema = (t: TFunction) => {
 
         studyMode: z
             .string()
-            .trim()
-            .default(""),
+            .trim(),
 
         institutionType: z
             .string()
-            .trim()
-            .default(""),
+            .trim(),
 
         isOku: z
             .boolean()
@@ -128,7 +125,9 @@ export const addHouseholdMemberSchema = (t: TFunction) => {
           const today = new Date();
           today.setHours(0, 0, 0, 0);
 
-          if (selectedDate > today) {
+          const minimumDate = new Date(1900, 0, 1);
+
+          if (selectedDate > today || selectedDate < minimumDate) {
             ctx.addIssue({
               code: "custom",
               path: ["dateOfBirth"],
@@ -139,39 +138,53 @@ export const addHouseholdMemberSchema = (t: TFunction) => {
 
         if (data.identificationNumber !== "") {
           if (data.citizenship === "malaysian") {
-            const identificationNumber =
-                data.identificationNumber;
+            const identificationNumber = data.identificationNumber;
+            const formatValid = /^\d{6}-\d{2}-\d{4}$/.test(identificationNumber);
+            const birthplaceCode = identificationNumber.slice(7, 9);
+            const birthplaceValid = (MYKAD_BIRTHPLACE_CODES as readonly string[]).includes(birthplaceCode);
+            const derivedDateOfBirth = getDobFromMyKad(identificationNumber);
 
-            const formatValid =
-                /^\d{6}-\d{2}-\d{4}$/.test(identificationNumber);
-
-            if (!formatValid) {
+            if (!formatValid || !birthplaceValid || !derivedDateOfBirth) {
               ctx.addIssue({
                 code: "custom",
                 path: ["identificationNumber"],
                 message: t("validation.myKadNumberInvalid")
               });
-            } else {
-              const birthplaceCode = identificationNumber.slice(7, 9);
+            }
 
-              const birthplaceValid = (MYKAD_BIRTHPLACE_CODES as readonly string[]).includes(birthplaceCode);
+            // Check DOB consistency with MyKad
+            // Compare YYMMDD to avoid incorrect century assumptions
+            if (
+                formatValid &&
+                birthplaceValid &&
+                derivedDateOfBirth &&
+                data.dateOfBirth
+            ) {
+              const selectedDate = data.dateOfBirth;
 
-              const month = Number(identificationNumber.slice(2, 4));
-              const day = Number(identificationNumber.slice(4, 6));
+              const selectedYear = String(
+                  selectedDate.getFullYear() % 100
+              ).padStart(2, "0");
 
-              const daysInMonth = new Date(2000, month, 0).getDate();
+              const selectedMonth = String(
+                  selectedDate.getMonth() + 1
+              ).padStart(2, "0");
 
-              const dateValid =
-                  month >= 1 &&
-                  month <= 12 &&
-                  day >= 1 &&
-                  day <= daysInMonth;
+              const selectedDay = String(
+                  selectedDate.getDate()
+              ).padStart(2, "0");
 
-              if (!birthplaceValid || !dateValid) {
+              const selectedDateDigits =
+                  `${selectedYear}${selectedMonth}${selectedDay}`;
+
+              const myKadDateDigits =
+                  identificationNumber.slice(0, 6);
+
+              if (selectedDateDigits !== myKadDateDigits) {
                 ctx.addIssue({
                   code: "custom",
-                  path: ["identificationNumber"],
-                  message: t("validation.myKadNumberInvalid")
+                  path: ["dateOfBirth"],
+                  message: t("validation.dateOfBirthMismatch")
                 });
               }
             }
@@ -182,35 +195,6 @@ export const addHouseholdMemberSchema = (t: TFunction) => {
               message: t("validation.identificationNumberInvalid")
             });
           }
-        }
-
-        if (data.isStudent === true) {
-          if (data.studyMode === "") {
-            ctx.addIssue({
-              code: "custom",
-              path: ["studyMode"],
-              message: t("validation.studyModeRequired")
-            });
-          }
-
-          if (data.institutionType === "") {
-            ctx.addIssue({
-              code: "custom",
-              path: ["institutionType"],
-              message: t("validation.institutionTypeRequired")
-            });
-          }
-        }
-
-        if (
-            data.isOku === true &&
-            data.okuRegistered === null
-        ) {
-          ctx.addIssue({
-            code: "custom",
-            path: ["okuRegistered"],
-            message: t("validation.okuRegistrationRequired")
-          });
         }
       });
 };
