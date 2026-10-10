@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useCallback, useEffect, useState } from "react";
 import { getPersonalInformation, PersonalInformation, updateMobileNumber } from "../../services/profile/personalInfoService";
 import { Mars, Venus } from "lucide-react-native";
-import { mobileNumberSchema } from "../../schemas/auth";
+import { mobileNumberSchema } from "../../schemas/registration";
 
 import Screen from "../../components/layout/Screen";
 import ScreenHeader from "../../components/layout/ScreenHeader";
@@ -302,21 +302,25 @@ export default function PersonalInfoScreen({
         <View className="gap-8">
           <Section title={t("profile.personalInformation.personalDetails")}>
             <Card>
+              {/* Full name */}
               <InformationRow
                   label={t("profile.personalInformation.fullName")}
                   value={personalInformation.fullName}
               />
 
+              {/* IC number */}
               <InformationRow
                   label={t("profile.personalInformation.identificationNumber")}
                   value={formatIdentificationNumber(personalInformation.identificationNumber)}
               />
 
+              {/* DOB */}
               <InformationRow
                   label={t("profile.personalInformation.dateOfBirth")}
                   value={formatDateOfBirth(personalInformation.dateOfBirth)}
               />
 
+              {/* Gender */}
               <View>
                 <View className="py-4">
                   <Text className="text-sm text-muted-foreground">
@@ -341,6 +345,7 @@ export default function PersonalInfoScreen({
                 <View className="h-px bg-border" />
               </View>
 
+              {/* Citizenship */}
               <InformationRow
                   label={t("profile.personalInformation.citizenship")}
                   value={getCitizenshipLabel()}
@@ -349,6 +354,7 @@ export default function PersonalInfoScreen({
             </Card>
           </Section>
 
+          {/* Contact - mobile (editable) */}
           <Section title={t("profile.personalInformation.contact")}>
             <Card>
               {editingMobile ? (

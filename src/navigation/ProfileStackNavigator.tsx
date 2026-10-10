@@ -2,6 +2,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ProfileStackParamList } from "../types/tabNavigator";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import PersonalInfoScreen from "../screens/profile/PersonalInfoScreen";
+import HouseholdScreen from "../screens/profile/household/HouseholdScreen";
+import AddHouseholdMemberScreen from "../screens/profile/household/AddHouseholdMemberScreen";
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
@@ -17,6 +19,22 @@ export default function ProfileStackNavigator() {
             name="PersonalInformation"
             component={PersonalInfoScreen}
         />
+
+        <Stack.Screen
+            name="Household"
+            component={HouseholdScreen}
+        />
+
+        {/*<Stack.Screen */}
+        {/*  name="HouseholdMember"*/}
+        {/*  component={}*/}
+        {/*/>*/}
+
+        <Stack.Screen
+            name="AddHouseholdMember"
+            component={AddHouseholdMemberScreen}
+        />
       </Stack.Navigator>
+
   );
 }

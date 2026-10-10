@@ -10,9 +10,14 @@ const ms = {
       remove: "Buang",
       complete: "Selesai",
       edit: "Edit",
-      save: "Simpan", // TBC
+      save: "Simpan",
+      saving: "Menyimpan",
       discard: "Buang",
       keepEditing: "Teruskan mengedit",
+
+      yes: "Ya",
+      no: "Tidak",
+      notProvided: "Tidak dinyatakan",
 
       selectDate: "Pilih tarikh",
       selectOption: "Pilih pilihan",
@@ -159,8 +164,8 @@ const ms = {
           stateTerritory: "Negeri / Wilayah Persekutuan",
           selectStateTerritory: "Pilih negeri atau Wilayah Persekutuan",
 
-          "locationAutoHelper": "Bandar dan negeri diisi secara automatik berdasarkan poskod anda.",
-          "locationManualHelper": "Kami tidak dapat mendapatkan lokasi anda. Sila masukkan bandar dan negeri secara manual."
+          locationAutoHelper: "Bandar dan negeri diisi secara automatik berdasarkan poskod anda.",
+          locationManualHelper: "Kami tidak dapat mendapatkan lokasi anda. Sila masukkan bandar dan negeri secara manual."
         },
 
         householdIncome: {
@@ -324,6 +329,82 @@ const ms = {
         youOnly: "Anda sahaja",
         oneMember: "Anda + 1 ahli isi rumah",
         multipleMembers: "Anda + {{count}} ahli isi rumah",
+
+        members: "Ahli Isi Rumah",
+        addMember: "Tambah Ahli Isi Rumah",
+        notProvided: "Tidak dinyatakan",
+
+        empty: {
+          title: "Tiada Ahli Isi Rumah",
+          description: "Tambah individu yang tinggal dalam isi rumah yang sama dengan anda.",
+        },
+
+        relationship: {
+          spouse: "Pasangan",
+          child: "Anak",
+          parent: "Ibu / Bapa",
+          sibling: "Adik-beradik",
+          grandchild: "Cucu",
+          other: "Lain-lain",
+        },
+
+        member: {
+          fullName: "Nama Penuh",
+          relationship: "Hubungan",
+          dateOfBirth: "Tarikh Lahir",
+        },
+
+        add: {
+          selectRelationship: "Pilih hubungan",
+
+          sections: {
+            basicInformation: "Maklumat Asas",
+            employmentIncome: "Pekerjaan & Pendapatan",
+            education: "Pendidikan",
+            disability: "Ketidakupayaan / OKU",
+          },
+
+          fields: {
+            citizenship: "Kewarganegaraan",
+            identificationNumber: "No. Kad Pengenalan / Pengenalan Diri",
+            gender: "Jantina",
+            isDependent: "Adakah individu ini bergantung kepada anda dari segi kewangan?",
+            employmentStatus: "Status Pekerjaan",
+            occupation: "Pekerjaan",
+            monthlyIncome: "Pendapatan Bulanan (RM)",
+            isStudent: "Adakah individu ini seorang pelajar?",
+            studyMode: "Mod Pengajian",
+            institutionType: "Jenis Institusi",
+            isOku: "Adakah individu ini orang kurang upaya (OKU)?",
+            okuRegistered: "Adakah individu ini berdaftar sebagai OKU?",
+          },
+
+          options: {
+            male: "Lelaki",
+            female: "Perempuan",
+
+            malaysian: "Warganegara Malaysia",
+            nonMalaysian: "Bukan Warganegara Malaysia",
+
+            employed: "Bekerja",
+            selfEmployed: "Bekerja Sendiri",
+            unemployed: "Menganggur",
+            student: "Pelajar",
+            retired: "Bersara",
+            homemaker: "Suri Rumah",
+
+            fullTime: "Sepenuh Masa",
+            partTime: "Separuh Masa",
+
+            school: "Sekolah",
+            college: "Kolej",
+            university: "Universiti",
+            other: "Lain-lain",
+          },
+
+          errorTitle: "Gagal Menambah Ahli Isi Rumah",
+          errorDescription: "Kami tidak dapat menyimpan maklumat ahli isi rumah ini. Sila cuba lagi.",
+        },
       },
 
       incomeEmployment: {
@@ -346,10 +427,14 @@ const ms = {
 
       language: {
         title: "Bahasa",
+
+        selectLanguageTitle: "Pilih Bahasa",
+        selectLanguageDescription: "Pilih bahasa yang ingin anda gunakan."
       },
 
       account: {
         signOut: "Log Keluar",
+        signOutDescription: "Adakah anda pasti mahu log keluar daripada akaun anda?"
       },
 
       errors: {
@@ -375,6 +460,8 @@ const ms = {
       myKadNumberInvalid: "Masukkan nombor kad pengenalan yang sah.",
 
       dateOfBirthRequired: "Tarikh lahir diperlukan.",
+      dateOfBirthInvalid: "Masukkan tarikh lahir yang sah.",
+      dateOfBirthMismatch: "Tarikh lahir tidak sepadan dengan nombor kad pengenalan.",
 
       citizenshipRequired: "Kewarganegaraan diperlukan.",
 
@@ -398,8 +485,9 @@ const ms = {
 
       householdMemberNameRequired: "Nama ahli isi rumah diperlukan.",
       relationshipRequired: "Hubungan diperlukan.",
-
       householdMemberDobRequired: "Tarikh lahir ahli isi rumah diperlukan.",
+
+      identificationNumberInvalid: "Masukkan nombor pengenalan yang sah.",
     },
   },
 };
