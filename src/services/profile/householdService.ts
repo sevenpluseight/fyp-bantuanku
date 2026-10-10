@@ -1,4 +1,5 @@
 import { supabase } from "../../lib/supabase";
+import { getCurrentProfileId } from "./profileService";
 
 export type HouseholdMemberSummary = {
   id: string;
@@ -25,37 +26,6 @@ export type HouseholdMember = {
   isOku: boolean | null;
   okuRegistered: boolean | null;
 };
-
-const getCurrentProfileId =
-    async (): Promise<string> => {
-      const {
-        data: { user },
-        error: userError
-      } = await supabase.auth.getUser();
-
-      if (userError) {
-        throw userError;
-      }
-
-      if (!user) {
-        throw new Error("No authenticated user.");
-      }
-
-      const {
-        data: profile,
-        error: profileError
-      } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("user_id", user.id)
-          .single();
-
-      if (profileError) {
-        throw profileError;
-      }
-
-      return profile.id;
-    };
 
 export const getHouseholdMembers =
     async (): Promise<HouseholdMemberSummary[]> => {
